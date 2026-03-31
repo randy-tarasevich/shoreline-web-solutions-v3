@@ -1,0 +1,122 @@
+---
+// src/components/global/Header.astro
+// Fixed navigation bar with backdrop blur.
+// Mobile menu toggles via a small inline script.
+//
+// Usage (inside a page, passed to Layout slot):
+//   <Header slot="header" />
+
+const navLinks = [
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  class="fixed top-0 left-0 right-0 z-50 bg-brand-base/70 backdrop-blur-xl border-b border-brand-border/40"
+>
+  <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="/" class="font-body font-bold text-lg text-brand-text tracking-tight">
+      Shoreline<span class="text-brand-accent">.</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-8" aria-label="Main navigation">
+      {navLinks.map(({ label, href }) => (
+        <a
+          href={href}
+          class:list={[
+            "text-sm font-medium transition-colors",
+            currentPath === href || currentPath.startsWith(href + "/")
+              ? "text-brand-text"
+              : "text-brand-muted hover:text-brand-text",
+          ]}
+        >
+          {label}
+        </a>
+      ))}
+      <a
+        href="/audit"
+        class="text-sm font-semibold bg-brand-accent hover:bg-brand-accent-light text-white px-5 py-2 rounded-lg transition-colors"
+      >
+        Free Audit
+      </a>
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="menu-toggle"
+      class="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5 cursor-pointer"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span id="bar-1" class="block w-5 h-0.5 bg-brand-text transition-transform duration-300 origin-center"></span>
+      <span id="bar-2" class="block w-5 h-0.5 bg-brand-text transition-opacity duration-300"></span>
+      <span id="bar-3" class="block w-5 h-0.5 bg-brand-text transition-transform duration-300 origin-center"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <nav
+    id="mobile-menu"
+    class="md:hidden hidden border-t border-brand-border/40 bg-brand-base/95 backdrop-blur-xl"
+    aria-label="Mobile navigation"
+  >
+    <div class="px-5 py-6 flex flex-col gap-4">
+      {navLinks.map(({ label, href }) => (
+        <a
+          href={href}
+          class:list={[
+            "text-base font-medium py-1 transition-colors",
+            currentPath === href || currentPath.startsWith(href + "/")
+              ? "text-brand-text"
+              : "text-brand-muted hover:text-brand-text",
+          ]}
+        >
+          {label}
+        </a>
+      ))}
+      <a
+        href="/audit"
+        class="mt-2 text-center text-sm font-semibold bg-brand-accent hover:bg-brand-accent-light text-white px-5 py-3 rounded-lg transition-colors"
+      >
+        Free Audit
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const bar1 = document.getElementById("bar-1");
+  const bar2 = document.getElementById("bar-2");
+  const bar3 = document.getElementById("bar-3");
+
+  let open = false;
+
+  toggle?.addEventListener("click", () => {
+    open = !open;
+    menu?.classList.toggle("hidden", !open);
+    toggle.setAttribute("aria-expanded", String(open));
+
+    // Animate bars to X
+    if (open) {
+      bar1?.classList.add("translate-y-[4px]", "rotate-45");
+      bar2?.classList.add("opacity-0");
+      bar3?.classList.add("-translate-y-[4px]", "-rotate-45");
+    } else {
+      bar1?.classList.remove("translate-y-[4px]", "rotate-45");
+      bar2?.classList.remove("opacity-0");
+      bar3?.classList.remove("-translate-y-[4px]", "-rotate-45");
+    }
+  });
+</script>

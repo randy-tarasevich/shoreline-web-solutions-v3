@@ -1,0 +1,28 @@
+---
+// src/components/home/ProblemStatement.astro
+// "Sound Familiar?" — names the visitor's pain before offering a solution.
+
+const problems = [
+  "Your website takes 5 seconds to load on a phone. Half your visitors leave before they see a single word.",
+  "You're invisible on Google. Competitors with worse service are showing up above you because their site is built for search.",
+  "Your entire online presence lives on Facebook. You don't own it, you can't control it, and the algorithm changes tomorrow.",
+];
+---
+
+<section class="py-24 md:py-32" aria-label="Common challenges">
+  <div class="max-w-6xl mx-auto px-5">
+    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-12 reveal">
+      Sound Familiar?
+    </p>
+
+    <div class="flex flex-col gap-10 max-w-2xl">
+      {problems.map((text, i) => (
+        <div class={`border-l-2 border-brand-accent pl-6 reveal reveal-d${i + 1}`}>
+          <p class="text-[clamp(1.05rem,1.8vw,1.2rem)] text-brand-muted leading-relaxed">
+            {text}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

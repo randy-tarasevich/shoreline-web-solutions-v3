@@ -1,0 +1,90 @@
+---
+// src/components/global/Footer.astro
+// Site footer with branding, navigation, and copyright.
+//
+// Usage (inside a page, passed to Layout slot):
+//   <Footer slot="footer" />
+
+const currentYear = new Date().getFullYear();
+
+const quickLinks = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
+  { label: "Free Audit", href: "/audit" },
+];
+
+const serviceLinks = [
+  { label: "Web Development", href: "/services/custom-web-development" },
+  { label: "E-commerce", href: "/services/ecommerce-solutions" },
+  { label: "AI Solutions", href: "/custom-ai-solutions" },
+  { label: "Custom Applications", href: "/services/custom-application-development" },
+];
+---
+
+<footer class="border-t border-brand-border bg-brand-base" aria-label="Site footer">
+  <div class="max-w-6xl mx-auto px-5 pt-16 pb-8">
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 mb-12">
+
+      <!-- Branding -->
+      <div>
+        <p class="font-body font-bold text-brand-text text-base mb-2">
+          Shoreline Web Solutions
+        </p>
+        <p class="font-display italic text-brand-dim text-sm mb-4">
+          We don't build websites. We build growth systems.
+        </p>
+        <p class="text-brand-dim text-sm">
+          <a href="mailto:info@shorelinewebsolutions.com" class="hover:text-brand-text transition-colors">
+            info@shorelinewebsolutions.com
+          </a>
+        </p>
+        <p class="text-brand-dim text-sm mt-1">Old Lyme, CT</p>
+      </div>
+
+      <!-- Quick links -->
+      <div>
+        <p class="text-brand-muted text-xs font-semibold uppercase tracking-widest mb-4">
+          Navigate
+        </p>
+        <ul class="flex flex-col gap-2.5">
+          {quickLinks.map(({ label, href }) => (
+            <li>
+              <a href={href} class="text-brand-dim text-sm hover:text-brand-text transition-colors">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Services -->
+      <div>
+        <p class="text-brand-muted text-xs font-semibold uppercase tracking-widest mb-4">
+          Services
+        </p>
+        <ul class="flex flex-col gap-2.5">
+          {serviceLinks.map(({ label, href }) => (
+            <li>
+              <a href={href} class="text-brand-dim text-sm hover:text-brand-text transition-colors">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="border-t border-brand-border pt-6 text-center">
+      <p class="text-brand-dim text-xs">
+        &copy; {currentYear} Shoreline Web Solutions. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>

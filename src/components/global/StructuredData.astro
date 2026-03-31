@@ -1,0 +1,22 @@
+---
+// src/components/global/StructuredData.astro
+// Renders JSON-LD structured data in a <script> tag.
+// Accepts a single schema object or an array of schemas.
+//
+// Usage:
+//   <StructuredData schema={localBusinessSchema} />
+//   <StructuredData schema={[localBusinessSchema, serviceSchema]} />
+
+interface Props {
+  schema: Record<string, any> | Record<string, any>[];
+}
+
+const { schema } = Astro.props;
+
+// If array, wrap in @graph. If single object, render directly.
+const jsonLd = Array.isArray(schema)
+  ? { "@context": "https://schema.org", "@graph": schema }
+  : { "@context": "https://schema.org", ...schema };
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 0)} />

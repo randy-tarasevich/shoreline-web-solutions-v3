@@ -1,0 +1,57 @@
+---
+// src/components/global/SEO.astro
+// Renders all <head> meta tags. Used inside Layout.astro.
+//
+// Usage:
+//   <SEO
+//     title="Custom Web Development | Old Lyme, CT | Shoreline Web Solutions"
+//     description="Custom-coded websites for Connecticut small businesses..."
+//     canonicalUrl="https://shorelinewebsolutions.com/services/custom-web-development"
+//     ogImage="/images/og-web-development.jpg"
+//     ogType="website"
+//   />
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  ogType?: string;
+}
+
+const {
+  title,
+  description,
+  canonicalUrl,
+  ogImage = "/images/og-default.jpg",
+  ogType = "website",
+} = Astro.props;
+
+const siteUrl = "https://shorelinewebsolutions.com";
+const resolvedCanonical = canonicalUrl || new URL(Astro.url.pathname, siteUrl).href;
+const resolvedOgImage = ogImage.startsWith("http") ? ogImage : new URL(ogImage, siteUrl).href;
+---
+
+<!-- Primary -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={resolvedCanonical} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={resolvedCanonical} />
+<meta property="og:image" content={resolvedOgImage} />
+<meta property="og:site_name" content="Shoreline Web Solutions" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={resolvedOgImage} />
+
+<!-- Geo -->
+<meta name="geo.region" content="US-CT" />
+<meta name="geo.placename" content="Old Lyme" />

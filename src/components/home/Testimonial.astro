@@ -1,0 +1,32 @@
+---
+// src/components/home/Testimonial.astro
+// A single testimonial block. Uses <blockquote> and <cite> for semantics.
+//
+// Usage:
+//   <Testimonial
+//     quote="He really took the time to understand..."
+//     author="Tayler Nadolny-Sipes"
+//     rating={5}
+//   />
+
+interface Props {
+  quote: string;
+  author: string;
+  rating?: number;
+}
+
+const { quote, author, rating = 5 } = Astro.props;
+const stars = "★".repeat(rating);
+---
+
+<blockquote class="border-l-2 border-brand-border hover:border-brand-accent transition-colors p-6">
+  <p class="text-brand-accent text-xs tracking-widest mb-3" aria-label={`${rating} out of 5 stars`}>
+    {stars}
+  </p>
+  <p class="font-display italic text-[1.1rem] text-brand-muted leading-relaxed mb-4">
+    "{quote}"
+  </p>
+  <cite class="not-italic text-brand-dim text-sm font-medium">
+    {author}
+  </cite>
+</blockquote>

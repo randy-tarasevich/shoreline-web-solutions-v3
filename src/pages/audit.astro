@@ -1,0 +1,16 @@
+---
+// src/pages/audit.astro
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import AuditWidget from '../components/audit/AuditWidget.astro';
+---
+
+<Layout
+  title="Free Website Audit | Shoreline Web Solutions | Old Lyme, CT"
+  description="Get a free, instant website performance report. See your PageSpeed score, Core Web Vitals, SEO health, mobile friendliness, and structured data — powered by the same metrics Google uses to rank your site."
+>
+  <Header slot="header" />
+  <AuditWidget />
+  <Footer slot="footer" />
+</Layout>

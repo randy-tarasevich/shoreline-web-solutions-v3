@@ -1,0 +1,28 @@
+---
+// src/components/home/AuditTeaser.astro
+// Teaser section that drives to the /audit page.
+// Does NOT contain the widget — just a headline, copy, and CTA.
+---
+
+<section class="py-24 md:py-32 border-t border-brand-border text-center" aria-label="Free website audit">
+  <div class="max-w-6xl mx-auto px-5">
+    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-5 reveal">
+      Free Tool
+    </p>
+
+    <h2 class="font-display text-[clamp(2rem,4vw,3rem)] text-brand-text leading-tight mb-5 reveal reveal-d1">
+      Find Out What's Holding<br>Your Website Back
+    </h2>
+
+    <p class="text-brand-muted text-[1.05rem] leading-relaxed max-w-xl mx-auto mb-10 reveal reveal-d2">
+      Enter your URL and get an instant report — PageSpeed score, Core Web Vitals, SEO fundamentals, mobile friendliness, and structured data. The same metrics Google uses to decide who ranks.
+    </p>
+
+    <a
+      href="/audit"
+      class="inline-block px-8 py-4 bg-brand-accent hover:bg-brand-accent-light text-white font-semibold text-[0.95rem] rounded-xl transition-all hover:-translate-y-0.5 reveal reveal-d3"
+    >
+      Run a Free Audit
+    </a>
+  </div>
+</section>

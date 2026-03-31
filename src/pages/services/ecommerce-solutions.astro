@@ -1,0 +1,162 @@
+---
+// src/pages/services/ecommerce-solutions.astro
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+
+const allServices = await getCollection('services');
+const service = allServices.find(s => s.data.slug === 'ecommerce-solutions');
+
+if (!service) {
+  return Astro.redirect('/services');
+}
+
+const { Content } = await render(service);
+
+const serviceSchema = {
+  "@type": "Service",
+  "name": "E-commerce Solutions",
+  "description": service.data.metaDescription,
+  "provider": {
+    "@id": "https://shorelinewebsolutions.com/#localbusiness"
+  },
+  "areaServed": [
+    { "@type": "State", "name": "Connecticut" },
+    { "@type": "Country", "name": "US" }
+  ],
+  "serviceType": "E-commerce Development"
+};
+
+const breadcrumbSchema = {
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://shorelinewebsolutions.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Services",
+      "item": "https://shorelinewebsolutions.com/services"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "E-commerce Solutions",
+      "item": "https://shorelinewebsolutions.com/services/ecommerce-solutions"
+    }
+  ]
+};
+
+const faqSchema = {
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does a custom online store cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "E-commerce builds are scoped based on catalog size and functionality needs. A typical small product catalog store starts in the $3,000 to $6,000 range. We provide a detailed proposal so you know exactly what you're getting."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I manage my own products and inventory?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. We build in a content management system so you can add, edit, and remove products without touching code. Update prices, swap photos, and manage inventory on your own."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What payment methods can my store accept?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We integrate with Stripe, PayPal, and Square. Your customers can pay with credit cards, debit cards, Apple Pay, Google Pay, and other digital wallets."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does shipping work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We can integrate with shipping calculators that pull real-time rates from USPS, UPS, and FedEx, or set up flat-rate and free shipping thresholds — whatever fits your business model."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will my store show up on Google?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Every product page includes structured data markup so Google can display rich product listings in search results with prices, availability, and ratings. Combined with on-page SEO fundamentals, your store is built to attract organic traffic from day one."
+      }
+    }
+  ]
+};
+---
+
+<Layout
+  title={service.data.metaTitle}
+  description={service.data.metaDescription}
+  ogImage="/images/og-ecommerce.jpg"
+  schema={[serviceSchema, breadcrumbSchema, faqSchema]}
+>
+  <Header slot="header" />
+
+  <!-- Breadcrumb -->
+  <nav class="max-w-4xl mx-auto px-5 pt-28 pb-4" aria-label="Breadcrumb">
+    <ol class="flex items-center gap-2 text-sm text-brand-dim">
+      <li><a href="/" class="hover:text-brand-muted transition-colors">Home</a></li>
+      <li aria-hidden="true">→</li>
+      <li><a href="/services" class="hover:text-brand-muted transition-colors">Services</a></li>
+      <li aria-hidden="true">→</li>
+      <li class="text-brand-muted">E-commerce Solutions</li>
+    </ol>
+  </nav>
+
+  <!-- Hero -->
+  <section class="max-w-4xl mx-auto px-5 pt-8 pb-16" aria-label="Service overview">
+    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-5 reveal">
+      E-commerce
+    </p>
+    <h1 class="font-display text-[clamp(2.2rem,5vw,3.5rem)] leading-[1.1] text-brand-text text-balance mb-6 reveal reveal-d1">
+      {service.data.headline}
+    </h1>
+    <p class="text-[clamp(1.05rem,2vw,1.2rem)] text-brand-muted leading-relaxed max-w-2xl reveal reveal-d2">
+      {service.data.subhead}
+    </p>
+  </section>
+
+  <!-- Content from markdown -->
+  <article class="max-w-4xl mx-auto px-5 pb-20 reveal">
+    <div class="prose-shoreline">
+      <Content />
+    </div>
+  </article>
+
+  <!-- CTA -->
+  <section class="py-20 border-t border-brand-border text-center" aria-label="Get started">
+    <div class="max-w-4xl mx-auto px-5">
+      <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.5rem)] text-brand-text leading-tight mb-4 reveal">
+        Ready to Sell Online?
+      </h2>
+      <p class="text-brand-muted leading-relaxed max-w-lg mx-auto mb-8 reveal reveal-d1">
+        Tell us about your products and how you want to sell them. We'll design a store that fits your business — not the other way around.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center reveal reveal-d2">
+        <a href="/contact" class="px-8 py-4 bg-brand-accent hover:bg-brand-accent-light text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5">
+          Start a Conversation
+        </a>
+        <a href="/audit" class="px-8 py-4 bg-transparent border border-brand-border hover:border-brand-dim text-brand-muted hover:text-brand-text font-semibold rounded-xl transition-all">
+          Audit Your Current Site
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Layout>

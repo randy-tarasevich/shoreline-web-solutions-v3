@@ -1,0 +1,129 @@
+---
+// src/layouts/Layout.astro
+// Base HTML shell for every page on the site.
+//
+// Usage:
+//   <Layout title="..." description="..." ogImage="..." schema={[...]}>
+//     <Header />
+//     <!-- page content -->
+//     <Footer />
+//   </Layout>
+
+import SEO from '../components/global/SEO.astro';
+import StructuredData from '../components/global/StructuredData.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  ogType?: string;
+  schema?: Record<string, any> | Record<string, any>[];
+}
+
+const { title, description, canonicalUrl, ogImage, ogType, schema } = Astro.props;
+
+// ── Sitewide LocalBusiness schema (every page) ───────────
+const localBusiness = {
+  "@type": "LocalBusiness",
+  "@id": "https://shorelinewebsolutions.com/#localbusiness",
+  "name": "Shoreline Web Solutions",
+  "description": "Custom web development and digital growth systems for Connecticut small businesses",
+  "url": "https://shorelinewebsolutions.com",
+  "email": "info@shorelinewebsolutions.com",
+  "telephone": "",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Old Lyme",
+    "addressRegion": "CT",
+    "addressCountry": "US"
+  },
+  "areaServed": [
+    { "@type": "State", "name": "Connecticut" },
+    { "@type": "Country", "name": "US" }
+  ],
+  "priceRange": "$$",
+  "sameAs": [
+    "https://www.google.com/maps/place/Shoreline+Web+Solutions/@41.9188605,-71.793318,8z/"
+  ]
+};
+
+// Merge sitewide schema with any page-specific schema
+const allSchemas = schema
+  ? Array.isArray(schema)
+    ? [localBusiness, ...schema]
+    : [localBusiness, schema]
+  : [localBusiness];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Fonts: preconnect first, then load -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
+  />
+
+  <!-- SEO meta tags -->
+  <SEO
+    title={title}
+    description={description}
+    canonicalUrl={canonicalUrl}
+    ogImage={ogImage}
+    ogType={ogType}
+  />
+
+  <!-- Structured data -->
+  <StructuredData schema={allSchemas} />
+
+  <!-- Sitemap -->
+  <link rel="sitemap" href="/sitemap-index.xml" />
+
+  <!-- Additional head content from pages -->
+  <slot name="head" />
+</head>
+
+<body>
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-brand-accent focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
+    Skip to main content
+  </a>
+
+  <slot name="header" />
+
+  <main id="main-content">
+    <slot />
+  </main>
+
+  <slot name="footer" />
+
+  <!-- Scroll reveal observer — single instance for the entire page -->
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+    );
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>

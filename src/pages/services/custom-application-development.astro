@@ -1,0 +1,162 @@
+---
+// src/pages/services/custom-application-development.astro
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+
+const allServices = await getCollection('services');
+const service = allServices.find(s => s.data.slug === 'custom-application-development');
+
+if (!service) {
+  return Astro.redirect('/services');
+}
+
+const { Content } = await render(service);
+
+const serviceSchema = {
+  "@type": "Service",
+  "name": "Custom Application Development",
+  "description": service.data.metaDescription,
+  "provider": {
+    "@id": "https://shorelinewebsolutions.com/#localbusiness"
+  },
+  "areaServed": [
+    { "@type": "State", "name": "Connecticut" },
+    { "@type": "Country", "name": "US" }
+  ],
+  "serviceType": "Custom Software Development"
+};
+
+const breadcrumbSchema = {
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://shorelinewebsolutions.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Services",
+      "item": "https://shorelinewebsolutions.com/services"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Custom Application Development",
+      "item": "https://shorelinewebsolutions.com/services/custom-application-development"
+    }
+  ]
+};
+
+const faqSchema = {
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do you figure out what to build?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We start with a conversation about your workflow — what you're doing manually, where time gets wasted, and what tools you're already using. From there we identify the highest-impact automation opportunity and scope a focused first build."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does a custom application take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most focused automation projects are delivered in 2 to 6 weeks. Larger applications with multiple features may take longer, but we always ship a working version early so you're getting value before the full build is complete."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does custom software cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pricing depends on complexity. A simple automation or integration starts around $1,500 to $3,000. More complex applications with dashboards, user accounts, and multiple integrations range from $5,000 to $15,000. We scope everything upfront with no surprises."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can it connect to the tools I already use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In most cases, yes. If your tool has an API — and most modern business software does — we can connect it. Common integrations include Google Workspace, QuickBooks, Stripe, Calendly, CRMs like HubSpot, and many more."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if my needs change after launch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That's expected. We build with flexibility in mind and offer ongoing support to add features, adjust workflows, and scale the application as your business grows. The code is yours, so you're never locked in."
+      }
+    }
+  ]
+};
+---
+
+<Layout
+  title={service.data.metaTitle}
+  description={service.data.metaDescription}
+  ogImage="/images/og-custom-apps.jpg"
+  schema={[serviceSchema, breadcrumbSchema, faqSchema]}
+>
+  <Header slot="header" />
+
+  <!-- Breadcrumb -->
+  <nav class="max-w-4xl mx-auto px-5 pt-28 pb-4" aria-label="Breadcrumb">
+    <ol class="flex items-center gap-2 text-sm text-brand-dim">
+      <li><a href="/" class="hover:text-brand-muted transition-colors">Home</a></li>
+      <li aria-hidden="true">→</li>
+      <li><a href="/services" class="hover:text-brand-muted transition-colors">Services</a></li>
+      <li aria-hidden="true">→</li>
+      <li class="text-brand-muted">Custom Application Development</li>
+    </ol>
+  </nav>
+
+  <!-- Hero -->
+  <section class="max-w-4xl mx-auto px-5 pt-8 pb-16" aria-label="Service overview">
+    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-5 reveal">
+      Custom Applications
+    </p>
+    <h1 class="font-display text-[clamp(2.2rem,5vw,3.5rem)] leading-[1.1] text-brand-text text-balance mb-6 reveal reveal-d1">
+      {service.data.headline}
+    </h1>
+    <p class="text-[clamp(1.05rem,2vw,1.2rem)] text-brand-muted leading-relaxed max-w-2xl reveal reveal-d2">
+      {service.data.subhead}
+    </p>
+  </section>
+
+  <!-- Content from markdown -->
+  <article class="max-w-4xl mx-auto px-5 pb-20 reveal">
+    <div class="prose-shoreline">
+      <Content />
+    </div>
+  </article>
+
+  <!-- CTA -->
+  <section class="py-20 border-t border-brand-border text-center" aria-label="Get started">
+    <div class="max-w-4xl mx-auto px-5">
+      <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.5rem)] text-brand-text leading-tight mb-4 reveal">
+        What's Eating Your Time?
+      </h2>
+      <p class="text-brand-muted leading-relaxed max-w-lg mx-auto mb-8 reveal reveal-d1">
+        Tell us about the manual process that's driving you crazy. We'll tell you if we can automate it, how long it would take, and what it would cost.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center reveal reveal-d2">
+        <a href="/contact" class="px-8 py-4 bg-brand-accent hover:bg-brand-accent-light text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5">
+          Describe Your Bottleneck
+        </a>
+        <a href="/audit" class="px-8 py-4 bg-transparent border border-brand-border hover:border-brand-dim text-brand-muted hover:text-brand-text font-semibold rounded-xl transition-all">
+          Audit Your Current Site
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Layout>
