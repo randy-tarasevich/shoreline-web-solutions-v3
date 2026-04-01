@@ -27,11 +27,6 @@ export async function GET({ request }) {
     psiUrl.searchParams.append("category", "best-practices")
     psiUrl.searchParams.append("category", "accessibility")
 
-    if (import.meta.env.PAGESPEED_API_KEY) {
-      psiUrl.searchParams.set("key", import.meta.env.PAGESPEED_API_KEY)
-    }
-
-    // ── 2. Fetch both in parallel ───────────────────────────────
     const [psiRes, htmlRes] = await Promise.allSettled([
       fetch(psiUrl.toString()),
       fetch(targetUrl, {

@@ -1,20 +1,210 @@
 ---
+// src/pages/contact.astro
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
+
+const breadcrumbSchema = {
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://shorelinewebsolutions.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Contact", "item": "https://shorelinewebsolutions.com/contact" }
+  ]
+};
 ---
 
 <Layout
   title="Contact | Shoreline Web Solutions | Old Lyme, CT"
-  description="Shoreline Web Solutions — custom web development for Connecticut small businesses."
+  description="Get in touch with Shoreline Web Solutions. Tell us about your project, ask a technical question, or request a free website audit. Based in Old Lyme, CT."
+  schema={breadcrumbSchema}
 >
   <Header slot="header" />
-  <section class="min-h-screen flex items-center justify-center pt-24">
-    <div class="text-center px-5">
-      <p class="text-brand-accent text-sm font-semibold uppercase tracking-widest mb-4">Coming Soon</p>
-      <h1 class="font-display text-4xl text-brand-text mb-4">Contact</h1>
-      <p class="text-brand-muted">This page is under construction.</p>
+
+  <!-- Breadcrumb -->
+  <nav class="max-w-4xl mx-auto px-5 pt-28 pb-4" aria-label="Breadcrumb">
+    <ol class="flex items-center gap-2 text-sm text-brand-dim">
+      <li><a href="/" class="hover:text-brand-muted transition-colors">Home</a></li>
+      <li aria-hidden="true">→</li>
+      <li class="text-brand-muted">Contact</li>
+    </ol>
+  </nav>
+
+  <!-- Hero -->
+  <section class="max-w-4xl mx-auto px-5 pt-8 pb-12" aria-label="Contact">
+    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-5 reveal">
+      Contact
+    </p>
+    <h1 class="font-display text-[clamp(2.2rem,5vw,3.5rem)] leading-[1.1] text-brand-text text-balance mb-6 reveal reveal-d1">
+      Let's Talk About Your Project
+    </h1>
+    <p class="text-[clamp(1.05rem,2vw,1.2rem)] text-brand-muted leading-relaxed max-w-2xl reveal reveal-d2">
+      Tell us what you're working on. Whether it's a new website, an upgrade to an existing one, or just a technical question — we're happy to help.
+    </p>
+  </section>
+
+  <!-- Form + Info -->
+  <section class="max-w-4xl mx-auto px-5 pb-20">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
+
+      <!-- Form -->
+      <div class="lg:col-span-3 reveal">
+        <form
+          id="contact-form"
+          action="https://api.web3forms.com/submit"
+          method="POST"
+          class="space-y-6"
+        >
+          <input type="hidden" name="access_key" value="43a560b2-da27-4999-be3d-fb3a4b2a44f7" />
+          <input type="hidden" name="subject" value="New inquiry from shorelinewebsolutions.com" />
+          <input type="hidden" name="from_name" value="Shoreline Web Solutions" />
+          <input type="checkbox" name="botcheck" class="hidden" />
+
+          <!-- Name -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-brand-muted mb-2">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full px-4 py-3 bg-brand-surface border border-brand-border rounded-xl text-brand-text placeholder:text-brand-dim text-base focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/50 transition-colors"
+              placeholder="Your name"
+            />
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-brand-muted mb-2">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-3 bg-brand-surface border border-brand-border rounded-xl text-brand-text placeholder:text-brand-dim text-base focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/50 transition-colors"
+              placeholder="you@yourbusiness.com"
+            />
+          </div>
+
+          <!-- Business Name -->
+          <div>
+            <label for="business" class="block text-sm font-medium text-brand-muted mb-2">Business Name <span class="text-brand-dim">(optional)</span></label>
+            <input
+              type="text"
+              id="business"
+              name="business"
+              class="w-full px-4 py-3 bg-brand-surface border border-brand-border rounded-xl text-brand-text placeholder:text-brand-dim text-base focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/50 transition-colors"
+              placeholder="Your business name"
+            />
+          </div>
+
+          <!-- Website URL -->
+          <div>
+            <label for="website" class="block text-sm font-medium text-brand-muted mb-2">Current Website <span class="text-brand-dim">(if you have one)</span></label>
+            <input
+              type="text"
+              id="website"
+              name="website"
+              class="w-full px-4 py-3 bg-brand-surface border border-brand-border rounded-xl text-brand-text placeholder:text-brand-dim text-base focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/50 transition-colors"
+              placeholder="www.yourbusiness.com"
+            />
+          </div>
+
+          <!-- Message -->
+          <div>
+            <label for="message" class="block text-sm font-medium text-brand-muted mb-2">How Can We Help?</label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              rows="5"
+              class="w-full px-4 py-3 bg-brand-surface border border-brand-border rounded-xl text-brand-text placeholder:text-brand-dim text-base focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/50 transition-colors resize-y"
+              placeholder="Tell us about your project, your business, or just ask a question."
+            ></textarea>
+          </div>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full sm:w-auto px-8 py-4 bg-brand-accent hover:bg-brand-accent-light text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Send Message
+          </button>
+        </form>
+
+        <!-- Success message -->
+        <div id="success-msg" class="hidden mt-8 p-6 bg-brand-surface border border-brand-accent/30 rounded-2xl">
+          <p class="text-brand-accent font-semibold mb-1">Message sent.</p>
+          <p class="text-brand-muted text-sm">Thanks for reaching out — we'll get back to you within one business day.</p>
+        </div>
+      </div>
+
+      <!-- Contact info sidebar -->
+      <div class="lg:col-span-2 reveal reveal-d1">
+        <div class="space-y-8">
+
+          <div>
+            <h2 class="text-sm font-semibold uppercase tracking-widest text-brand-muted mb-3">Email</h2>
+            <a href="mailto:info@shorelinewebsolutions.com" class="text-brand-text hover:text-brand-accent transition-colors">
+              info@shorelinewebsolutions.com
+            </a>
+          </div>
+
+          <div>
+            <h2 class="text-sm font-semibold uppercase tracking-widest text-brand-muted mb-3">Location</h2>
+            <p class="text-brand-text">Old Lyme, CT</p>
+            <p class="text-brand-dim text-sm mt-1">Serving Connecticut and clients nationwide</p>
+          </div>
+
+          <div>
+            <h2 class="text-sm font-semibold uppercase tracking-widest text-brand-muted mb-3">Response Time</h2>
+            <p class="text-brand-text">Within one business day</p>
+          </div>
+
+          <div class="pt-4 border-t border-brand-border">
+            <h2 class="text-sm font-semibold uppercase tracking-widest text-brand-muted mb-3">Prefer to Start With Data?</h2>
+            <p class="text-brand-dim text-sm mb-4">Run a free audit on your current site and we'll use the results as a starting point for our conversation.</p>
+            <a href="/audit" class="inline-flex items-center gap-2 text-brand-accent font-semibold text-sm hover:gap-3 transition-all">
+              Free Website Audit<span aria-hidden="true">→</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </section>
+
   <Footer slot="footer" />
 </Layout>
+
+<script>
+  const form = document.getElementById("contact-form");
+  const btn = document.getElementById("submit-btn");
+  const successMsg = document.getElementById("success-msg");
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+
+    try {
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+      });
+
+      if (res.ok) {
+        form.reset();
+        form.classList.add("hidden");
+        successMsg?.classList.remove("hidden");
+      } else {
+        btn.textContent = "Something went wrong — try again";
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = "Something went wrong — try again";
+      btn.disabled = false;
+    }
+  });
+</script>

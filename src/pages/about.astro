@@ -3,19 +3,132 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
+
+const breadcrumbSchema = {
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://shorelinewebsolutions.com/" },
+    { "@type": "ListItem", "position": 2, "name": "About", "item": "https://shorelinewebsolutions.com/about" }
+  ]
+};
 ---
 
 <Layout
   title="About | Shoreline Web Solutions | Old Lyme, CT"
-  description="Shoreline Web Solutions is a custom web development studio in Old Lyme, Connecticut helping small businesses grow online with hand-coded websites, e-commerce stores, and AI-powered tools."
+  description="Shoreline Web Solutions builds custom websites and digital growth systems for small businesses. Based in Old Lyme, CT — serving Connecticut and clients nationwide."
+  schema={breadcrumbSchema}
 >
   <Header slot="header" />
 
-  <section class="min-h-screen flex items-center justify-center pt-24">
-    <div class="text-center px-5">
-      <p class="text-brand-accent text-sm font-semibold uppercase tracking-widest mb-4">Coming Soon</p>
-      <h1 class="font-display text-4xl text-brand-text mb-4">About</h1>
-      <p class="text-brand-muted">This page is under construction.</p>
+  <!-- Breadcrumb -->
+  <nav class="max-w-4xl mx-auto px-5 pt-28 pb-4" aria-label="Breadcrumb">
+    <ol class="flex items-center gap-2 text-sm text-brand-dim">
+      <li><a href="/" class="hover:text-brand-muted transition-colors">Home</a></li>
+      <li aria-hidden="true">→</li>
+      <li class="text-brand-muted">About</li>
+    </ol>
+  </nav>
+
+  <!-- Hero -->
+  <section class="max-w-4xl mx-auto px-5 pt-8 pb-16" aria-label="About">
+    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-5 reveal">
+      About
+    </p>
+    <h1 class="font-display text-[clamp(2.2rem,5vw,3.5rem)] leading-[1.1] text-brand-text text-balance mb-6 reveal reveal-d1">
+      We Don't Build Websites.<br>We Build Growth Systems.
+    </h1>
+    <p class="text-[clamp(1.05rem,2vw,1.2rem)] text-brand-muted leading-relaxed max-w-2xl reveal reveal-d2">
+      Shoreline Web Solutions is a custom web development studio based in Old Lyme, Connecticut. We help small businesses get found online, convert more visitors, and stop wasting time on things that should be automated.
+    </p>
+  </section>
+
+  <!-- Content -->
+  <article class="max-w-4xl mx-auto px-5 pb-20">
+    <div class="prose-shoreline">
+
+      <div class="reveal">
+        <h2>What We Believe</h2>
+        <p>
+          Most small businesses don't need a website. They need a system that attracts customers, builds trust, and drives revenue — and a website happens to be the centerpiece of that system.
+        </p>
+        <p>
+          That distinction matters. It's the difference between a developer who hands you a template and disappears, and a partner who understands your business goals and builds something engineered to achieve them. We're the second one.
+        </p>
+      </div>
+
+      <div class="reveal">
+        <h2>Why Custom</h2>
+        <p>
+          We don't use WordPress, Squarespace, or page builders. Every site we build is hand-coded from scratch using modern technology that produces faster, more secure, and more search-visible results than any template platform can deliver.
+        </p>
+        <p>
+          That's not a philosophical preference — it's a measurable advantage. Our sites consistently score 95+ on Google's PageSpeed test. The average WordPress site scores between 30 and 60. Speed is a Google ranking factor, and it directly affects whether visitors stay or leave.
+        </p>
+        <p>
+          Custom also means you own everything. No monthly platform fees. No vendor lock-in. No limitations on what you can build. The code is yours, the design is yours, and the data is yours.
+        </p>
+      </div>
+
+      <div class="reveal">
+        <h2>How We Work</h2>
+        <p>
+          Every project starts with one question: what does growth look like for your business? More phone calls? More online orders? More visibility in local search? The answer shapes everything we build.
+        </p>
+        <p>
+          From there, we work in phases. You see progress every week, give feedback at every step, and never wonder what's happening with your project. We don't disappear into a cave and emerge three months later with something you didn't ask for.
+        </p>
+        <p>
+          After launch, we stay involved. We monitor performance, track your search visibility, and make recommendations as your business evolves. A website isn't a one-time project — it's infrastructure that needs to grow with you.
+        </p>
+      </div>
+
+      <div class="reveal">
+        <h2>What We Build With</h2>
+        <p>
+          Our core stack is Astro.js and Tailwind CSS — modern tools built for performance and SEO. For server-side applications and AI integrations, we use Python and Node.js. Hosting runs through Cloudflare Pages and DigitalOcean.
+        </p>
+        <p>
+          Every technology choice comes down to one question: does this make the client's business more successful? If it doesn't serve that goal, we don't use it.
+        </p>
+      </div>
+
+      <div class="reveal">
+        <h2>Who We Work With</h2>
+        <p>
+          We work with small to medium-sized businesses — primarily in Connecticut, but also nationwide. Service businesses, e-commerce brands, professional practices, local shops. If you take your business seriously and want a web presence that reflects that, we're a good fit.
+        </p>
+        <p>
+          We're especially effective for businesses that have outgrown their template website, are invisible on Google, or are relying entirely on social media as their online presence. If any of that sounds familiar, we should talk.
+        </p>
+      </div>
+
+      <div class="reveal">
+        <h2>Local Presence</h2>
+        <p>
+          We're based in Old Lyme, CT, and active in the Connecticut shoreline business community through Shoreline United Networking (S.U.N.) in Waterford. We understand the local market because we're part of it.
+        </p>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- CTA -->
+  <section class="py-20 border-t border-brand-border text-center" aria-label="Get in touch">
+    <div class="max-w-4xl mx-auto px-5">
+      <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.5rem)] text-brand-text leading-tight mb-4 reveal">
+        Ready to Build Something That Works?
+      </h2>
+      <p class="text-brand-muted leading-relaxed max-w-lg mx-auto mb-8 reveal reveal-d1">
+        Tell us about your business and what you're trying to achieve. We'll tell you honestly whether we can help — and if we can, exactly how we'd do it.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center reveal reveal-d2">
+        <a href="/contact" class="px-8 py-4 bg-brand-accent hover:bg-brand-accent-light text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5">
+          Start a Conversation
+        </a>
+        <a href="/audit" class="px-8 py-4 bg-transparent border border-brand-border hover:border-brand-dim text-brand-muted hover:text-brand-text font-semibold rounded-xl transition-all">
+          Audit Your Website Free
+        </a>
+      </div>
     </div>
   </section>
 
