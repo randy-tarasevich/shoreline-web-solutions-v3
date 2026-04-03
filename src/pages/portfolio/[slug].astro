@@ -1,5 +1,6 @@
 ---
 // src/pages/portfolio/[slug].astro
+
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/global/Header.astro';
@@ -19,9 +20,9 @@ const { Content } = await render(project);
 const breadcrumbSchema = {
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://shorelinewebsolutions.com/" },
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://shorelinewebsolutions.com" },
     { "@type": "ListItem", "position": 2, "name": "Portfolio", "item": "https://shorelinewebsolutions.com/portfolio" },
-    { "@type": "ListItem", "position": 3, "name": project.data.title, "item": `https://shorelinewebsolutions.com/portfolio/${project.data.slug}` }
+    { "@type": "ListItem", "position": 3, "name": project.data.title, "item": `https://shorelinewebsolutions.com/portfolio/${project.data.slug}` },
   ]
 };
 ---
@@ -29,81 +30,209 @@ const breadcrumbSchema = {
 <Layout
   title={`${project.data.title} | Portfolio | Shoreline Web Solutions`}
   description={project.data.description}
+  canonical={`https://shorelinewebsolutions.com/portfolio/${project.data.slug}`}
   schema={breadcrumbSchema}
 >
   <Header slot="header" />
 
-  <!-- Breadcrumb -->
-  <nav class="max-w-4xl mx-auto px-5 pt-28 pb-4" aria-label="Breadcrumb">
-    <ol class="flex items-center gap-2 text-sm text-brand-dim">
-      <li><a href="/" class="hover:text-brand-muted transition-colors">Home</a></li>
-      <li aria-hidden="true">→</li>
-      <li><a href="/portfolio" class="hover:text-brand-muted transition-colors">Portfolio</a></li>
-      <li aria-hidden="true">→</li>
-      <li class="text-brand-muted">{project.data.title}</li>
-    </ol>
-  </nav>
+  <article class="max-w-3xl mx-auto px-5 pt-36 pb-24">
 
-  <!-- Hero -->
-  <section class="max-w-4xl mx-auto px-5 pt-8 pb-12" aria-label="Project overview">
-    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-5 reveal">
-      Case Study
-    </p>
-    <h1 class="font-display text-[clamp(2.2rem,5vw,3.5rem)] leading-[1.1] text-brand-text text-balance mb-6 reveal reveal-d1">
-      {project.data.title}
-    </h1>
-    <p class="text-[clamp(1.05rem,2vw,1.2rem)] text-brand-muted leading-relaxed max-w-2xl mb-6 reveal reveal-d2">
-      {project.data.description}
-    </p>
+    <!-- Breadcrumb -->
+    <nav class="mb-10 reveal" aria-label="Breadcrumb">
+      <ol class="flex items-center gap-2 text-sm text-brand-dim">
+        <li><a href="/" class="hover:text-brand-muted transition-colors">Home</a></li>
+        <li aria-hidden="true" class="text-brand-border">→</li>
+        <li><a href="/portfolio" class="hover:text-brand-muted transition-colors">Portfolio</a></li>
+        <li aria-hidden="true" class="text-brand-border">→</li>
+        <li class="text-brand-muted truncate">{project.data.title}</li>
+      </ol>
+    </nav>
 
-    <!-- Tech + link -->
-    <div class="flex flex-wrap items-center gap-4 reveal reveal-d3">
-      <div class="flex flex-wrap gap-2">
+    <!-- Header -->
+    <header class="mb-14">
+      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-5 reveal">
+        Case Study
+      </p>
+      <h1 class="font-display text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.08] tracking-tight text-brand-text text-balance mb-5 reveal reveal-d1">
+        {project.data.title}
+      </h1>
+      <p class="text-[clamp(1rem,1.8vw,1.15rem)] text-brand-muted leading-relaxed mb-8 reveal reveal-d2">
+        {project.data.description}
+      </p>
+
+      <!-- Tech Stack -->
+      <div class="flex flex-wrap gap-2 mb-8 reveal reveal-d2">
         {project.data.technologies.map((tech) => (
-          <span class="text-xs font-medium text-brand-dim bg-brand-surface px-3 py-1 rounded-full border border-brand-border">
+          <span class="text-xs font-medium text-brand-dim bg-brand-surface px-3 py-1.5 rounded-full border border-brand-border">
             {tech}
           </span>
         ))}
       </div>
+
+      <!-- Visit Site link -->
       {project.data.url && (
         <a
           href={project.data.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 text-brand-accent font-semibold text-sm hover:gap-3 transition-all"
+          class="inline-flex items-center gap-2 text-brand-accent hover:text-brand-accent-light font-semibold text-sm transition-colors reveal reveal-d3"
         >
-          Visit Site<span aria-hidden="true">↗</span>
+          Visit Live Site <span aria-hidden="true">↗</span>
         </a>
       )}
-    </div>
-  </section>
+    </header>
 
-  <!-- Content -->
-  <article class="max-w-4xl mx-auto px-5 pb-20 reveal">
+    <hr class="border-brand-border mb-14" />
+
+    <!-- Case Study Content -->
     <div class="prose-shoreline">
       <Content />
     </div>
-  </article>
 
-  <!-- CTA -->
-  <section class="py-20 border-t border-brand-border text-center" aria-label="Get started">
-    <div class="max-w-4xl mx-auto px-5">
-      <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.5rem)] text-brand-text leading-tight mb-4 reveal">
-        Want Results Like These?
-      </h2>
-      <p class="text-brand-muted leading-relaxed max-w-lg mx-auto mb-8 reveal reveal-d1">
-        Every project starts with a conversation about your business. Tell us what you're trying to achieve.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center reveal reveal-d2">
-        <a href="/contact" class="px-8 py-4 bg-brand-accent hover:bg-brand-accent-light text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5">
-          Start a Conversation
-        </a>
-        <a href="/portfolio" class="px-8 py-4 bg-transparent border border-brand-border hover:border-brand-dim text-brand-muted hover:text-brand-text font-semibold rounded-xl transition-all">
-          View All Projects
-        </a>
-      </div>
+    <hr class="border-brand-border mt-16 mb-10" />
+
+    <!-- Footer nav -->
+    <div class="flex items-center justify-between">
+      <a
+        href="/portfolio"
+        class="inline-flex items-center gap-2 text-brand-dim hover:text-brand-muted text-sm transition-colors"
+      >
+        ← All Projects
+      </a>
+      <a
+        href="/contact"
+        class="inline-block px-6 py-3 bg-brand-accent hover:bg-brand-accent-light text-white font-semibold text-[0.9rem] rounded-xl transition-all hover:-translate-y-0.5"
+      >
+        Work With Us
+      </a>
     </div>
-  </section>
+
+  </article>
 
   <Footer slot="footer" />
 </Layout>
+
+<style>
+  /* ── Prose styles for case study markdown content ─────────── */
+  .prose-shoreline :global(h2) {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    line-height: 1.2;
+    color: var(--color-brand-text);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose-shoreline :global(h3) {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--color-brand-text);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose-shoreline :global(p) {
+    color: var(--color-brand-muted);
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+  }
+
+  .prose-shoreline :global(ul),
+  .prose-shoreline :global(ol) {
+    color: var(--color-brand-muted);
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .prose-shoreline :global(li) {
+    margin-bottom: 0.4rem;
+    line-height: 1.7;
+  }
+
+  .prose-shoreline :global(strong) {
+    color: var(--color-brand-text);
+    font-weight: 600;
+  }
+
+  .prose-shoreline :global(em) {
+    color: var(--color-brand-accent);
+    font-style: italic;
+  }
+
+  .prose-shoreline :global(hr) {
+    border-color: var(--color-brand-border);
+    margin: 2.5rem 0;
+  }
+
+  .prose-shoreline :global(a) {
+    color: var(--color-brand-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose-shoreline :global(a:hover) {
+    color: var(--color-brand-accent-light);
+  }
+
+  /* ── Table styles ─────────────────────────────────────────── */
+  .prose-shoreline :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 0.9rem;
+  }
+
+  .prose-shoreline :global(thead tr) {
+    border-bottom: 1px solid var(--color-brand-border);
+  }
+
+  .prose-shoreline :global(th) {
+    text-align: left;
+    padding: 0.6rem 1rem;
+    color: var(--color-brand-dim);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .prose-shoreline :global(td) {
+    padding: 0.75rem 1rem;
+    color: var(--color-brand-muted);
+    border-bottom: 1px solid var(--color-brand-border);
+    line-height: 1.5;
+  }
+
+  .prose-shoreline :global(tbody tr:last-child td) {
+    border-bottom: none;
+  }
+
+  .prose-shoreline :global(tbody tr:hover td) {
+    background: var(--color-brand-surface);
+  }
+
+  /* Bold inside table cells = accent color for "After" numbers */
+  .prose-shoreline :global(td strong) {
+    color: var(--color-brand-accent);
+    font-weight: 600;
+  }
+
+  /* ── Code ─────────────────────────────────────────────────── */
+  .prose-shoreline :global(code) {
+    font-size: 0.85em;
+    background: var(--color-brand-surface);
+    border: 1px solid var(--color-brand-border);
+    border-radius: 4px;
+    padding: 0.15em 0.4em;
+    color: var(--color-brand-accent);
+  }
+
+  .prose-shoreline :global(blockquote) {
+    border-left: 2px solid var(--color-brand-accent);
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--color-brand-dim);
+    font-style: italic;
+  }
+</style>

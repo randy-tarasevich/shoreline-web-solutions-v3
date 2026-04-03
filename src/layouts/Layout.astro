@@ -11,6 +11,9 @@
 
 import SEO from '../components/global/SEO.astro';
 import StructuredData from '../components/global/StructuredData.astro';
+import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/500.css';
+import '@fontsource/plus-jakarta-sans/600.css';
 import '../styles/global.css';
 
 interface Props {
@@ -19,7 +22,7 @@ interface Props {
   canonicalUrl?: string;
   ogImage?: string;
   ogType?: string;
-  schema?: Record<string, any> | Record<string, any>[];
+  schema?: Record<string, any> | Record<string, any>[]; 
 }
 
 const { title, description, canonicalUrl, ogImage, ogType, schema } = Astro.props;
@@ -69,15 +72,8 @@ const allSchemas = schema
   <!-- Fonts: preconnect first, then load -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    rel="preload"
-    as="style"
-    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
-  />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" />
 
   <!-- SEO meta tags -->
   <SEO
