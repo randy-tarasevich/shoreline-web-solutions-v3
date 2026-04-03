@@ -1,38 +1,38 @@
 ---
-// src/pages/services/custom-application-development.astro
+// src/pages/services/automation-solutions.astro
 
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 
 const seo = {
-  title: "Custom Application Development | Shoreline Web Solutions",
-  description: "Purpose-built web applications, client portals, dashboards, and internal tools for Connecticut small businesses.",
-  canonical: "https://shorelinewebsolutions.com/services/custom-application-development",
+  title: "Automation Solutions | Shoreline Web Solutions",
+  description: "Business automation for Connecticut small businesses. Connect your tools, eliminate manual work, and reclaim hours every week.",
+  canonical: "https://shorelinewebsolutions.com/services/automation-solutions",
 };
 
 const deliverables = [
-  "Discovery and scoping session to map your exact workflow",
-  "Custom-coded web applications — no off-the-shelf software that almost fits",
-  "Client portals, booking systems, internal dashboards, and admin tools",
-  "Role-based access control — the right people see the right data",
-  "API integrations with your existing tools (CRMs, payment processors, email)",
-  "Mobile-responsive and cross-browser tested",
-  "Hosted and deployed on Cloudflare for speed and reliability",
-  "Documentation and training so your team can actually use it",
+  "Workflow audit to identify your highest-value automation opportunities",
+  "Custom automation pipelines connecting your existing tools",
+  "Lead capture and follow-up sequences that run without you",
+  "Automated reporting — the numbers you need, delivered on schedule",
+  "Form-to-CRM and email integration setup",
+  "Review request and reputation management automation",
+  "Notification and alert systems for your team",
+  "Documentation so you understand and control what runs",
 ];
 
 const serviceSchema = {
   "@type": "Service",
-  "name": "Custom Application Development",
+  "name": "Automation Solutions",
   "provider": {
     "@type": "LocalBusiness",
     "name": "Shoreline Web Solutions",
     "url": "https://shorelinewebsolutions.com"
   },
-  "description": "Purpose-built web applications, dashboards, portals, and internal tools designed around your business workflow.",
+  "description": "Business process automation for small businesses. Connect tools, eliminate manual steps, and reclaim hours every week.",
   "areaServed": "Connecticut",
-  "serviceType": "Software Development"
+  "serviceType": "Business Automation"
 };
 ---
 
@@ -49,13 +49,13 @@ const serviceSchema = {
         ← All Services
       </a>
       <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-5 reveal">
-        Custom Application Development
+        Automation Solutions
       </p>
       <h1 class="font-display text-[clamp(2.6rem,6vw,5rem)] leading-[1.06] tracking-tight text-brand-text text-balance max-w-3xl mb-6 reveal reveal-d1">
-        Software That Fits<br />the Way You Work.
+        Do More.<br />Touch Less.
       </h1>
       <p class="text-[clamp(1rem,1.8vw,1.2rem)] text-brand-muted leading-relaxed max-w-xl reveal reveal-d2">
-        Generic software is built for the average business. You're not average. We build the tools, portals, and systems that match exactly how your operation runs — not the other way around.
+        Every hour you spend on repetitive tasks is an hour you're not spending on the work that actually grows your business. We build the systems that handle the busywork — so you don't have to.
       </p>
     </div>
   </section>
@@ -65,34 +65,33 @@ const serviceSchema = {
   </div>
 
   <!-- The Problem -->
-  <section class="py-20 px-5" aria-label="The problem with off-the-shelf software">
+  <section class="py-20 px-5" aria-label="The cost of manual work">
     <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-start">
       <div>
         <h2 class="font-display text-[clamp(1.5rem,2.8vw,2.2rem)] text-brand-text leading-tight mb-5 reveal">
-          Off-the-Shelf Software Makes You Adapt to It
+          Manual Work Is Expensive — Even When It's Free
         </h2>
         <p class="text-brand-muted leading-relaxed mb-4 reveal reveal-d1">
-          Every SaaS tool you pay for monthly was built for someone else's workflow. You end up duct-taping three platforms together, paying for features you never use, and still doing half the work manually because nothing quite fits.
+          Copying data between systems. Sending follow-up emails by hand. Pulling reports every Monday morning. Responding to every new lead within five minutes or losing them. These tasks aren't free — they cost you time, attention, and consistency.
         </p>
         <p class="text-brand-muted leading-relaxed reveal reveal-d2">
-          Custom software flips the equation. It's built around your process, your team, and your customers — and you own it outright. No subscription creep. No feature lock-in. No vendor holding your data hostage.
+          Automation doesn't replace you. It handles the predictable so you can focus on the unpredictable — the relationships, the decisions, and the work that actually requires a human.
         </p>
       </div>
       <div class="reveal reveal-d1">
         <div class="border border-brand-border rounded-2xl p-8 bg-brand-surface">
-          <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-6">Common Use Cases</p>
-          <div class="flex flex-col gap-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-6">Where We Find Time</p>
+          <div class="flex flex-col gap-5">
             {[
-              "Client portals for document sharing and project updates",
-              "Custom booking and scheduling systems",
-              "Internal dashboards and reporting tools",
-              "Lead capture and CRM integration pipelines",
-              "Inventory and order management systems",
-              "Staff-facing admin panels and workflows",
-            ].map((item) => (
-              <div class="flex items-start gap-3">
-                <span class="text-brand-accent shrink-0" aria-hidden="true">✦</span>
-                <p class="text-brand-dim text-sm leading-relaxed">{item}</p>
+              { task: "Lead follow-up", save: "3–5 hrs/week" },
+              { task: "Appointment reminders", save: "2–3 hrs/week" },
+              { task: "Weekly reporting", save: "2–4 hrs/week" },
+              { task: "Review requests", save: "1–2 hrs/week" },
+              { task: "Data entry between tools", save: "4–6 hrs/week" },
+            ].map(({ task, save }) => (
+              <div class="flex items-center justify-between border-b border-brand-border pb-4 last:border-0 last:pb-0">
+                <p class="text-brand-muted text-sm">{task}</p>
+                <p class="text-brand-accent text-sm font-semibold">{save}</p>
               </div>
             ))}
           </div>
@@ -112,7 +111,7 @@ const serviceSchema = {
         What's Included
       </h2>
       <p class="text-brand-muted leading-relaxed max-w-lg mb-12 reveal reveal-d1">
-        Every application engagement starts with a deep-dive into your workflow before a single line of code is written.
+        We start by understanding your current workflow before recommending anything. Every automation is built to match how you actually operate.
       </p>
       <div class="grid md:grid-cols-2 gap-4">
         {deliverables.map((item, i) => (
@@ -137,10 +136,10 @@ const serviceSchema = {
       </h2>
       <div class="grid md:grid-cols-2 gap-4">
         {[
-          "Businesses spending hours every week on tasks that should be automated",
-          "Service providers who need a client-facing portal but can't find one that fits",
-          "Teams cobbling together 3–4 tools that were never meant to work together",
-          "Owners who have outgrown their current software but don't want another SaaS subscription",
+          "Business owners doing things manually that a computer could handle in seconds",
+          "Teams that lose leads because follow-up is inconsistent or too slow",
+          "Service businesses that want more Google reviews but hate asking for them",
+          "Anyone spending time every week on a task that happens the exact same way every time",
         ].map((item, i) => (
           <div class={`flex items-start gap-4 p-5 rounded-xl border border-brand-border reveal reveal-d${i + 1}`}>
             <span class="text-brand-accent shrink-0 mt-1" aria-hidden="true">→</span>
@@ -155,10 +154,10 @@ const serviceSchema = {
   <section class="py-24 text-center px-5 bg-brand-surface" aria-label="Get started">
     <div class="max-w-2xl mx-auto">
       <h2 class="font-display text-[clamp(1.6rem,3vw,2.4rem)] text-brand-text leading-tight mb-4 reveal">
-        Have a Workflow Problem That Needs Solving?
+        What Would You Do With 10 Extra Hours a Week?
       </h2>
       <p class="text-brand-muted leading-relaxed mb-8 reveal reveal-d1">
-        Describe what you're trying to do — even if you're not sure what the solution looks like. We'll map it out together.
+        Tell us where you're losing time. We'll show you what can be automated and what it would actually save you.
       </p>
       <a
         href="/contact"

@@ -1,20 +1,135 @@
 ---
+// src/pages/services/index.astro
+// Services hub — links to all four individual service pages.
+
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
+
+const seo = {
+  title: "Services | Shoreline Web Solutions",
+  description: "Custom web development, application development, automation, and SEO for small businesses. Built from scratch. Built to grow.",
+  canonical: "https://shorelinewebsolutions.com/services",
+};
+
+const services = [
+  {
+    number: "01",
+    name: "Custom Web Development",
+    tagline: "Built to Convert. Built to Last.",
+    summary: "A hand-coded website engineered to rank, load fast, and turn visitors into customers. No templates, no page builders, no shortcuts.",
+    href: "/services/custom-web-development",
+    accent: "Web Dev",
+  },
+  {
+    number: "02",
+    name: "Custom Application Development",
+    tagline: "Software That Fits the Way You Work.",
+    summary: "Purpose-built tools — client portals, internal dashboards, booking systems — designed around your workflow, not the other way around.",
+    href: "/services/custom-application-development",
+    accent: "App Dev",
+  },
+  {
+    number: "03",
+    name: "Automation Solutions",
+    tagline: "Do More. Touch Less.",
+    summary: "Connect your tools, eliminate manual steps, and reclaim hours every week. We automate the repetitive so you can focus on the work that actually matters.",
+    href: "/services/automation-solutions",
+    accent: "Automation",
+  },
+  {
+    number: "04",
+    name: "SEO & Performance Optimization",
+    tagline: "Get Found. Get Chosen. Get Ahead.",
+    summary: "Technical SEO, Core Web Vitals tuning, and content strategy that puts you on the first page — and keeps you there.",
+    href: "/services/seo-performance-optimization",
+    accent: "SEO",
+  },
+];
 ---
 
-<Layout
-  title="Services | Shoreline Web Solutions | Old Lyme, CT"
-  description="Custom web development, e-commerce, AI solutions, and application development for Connecticut small businesses."
->
+<Layout title={seo.title} description={seo.description} canonical={seo.canonical}>
   <Header slot="header" />
-  <section class="min-h-screen flex items-center justify-center pt-24">
-    <div class="text-center px-5">
-      <p class="text-brand-accent text-sm font-semibold uppercase tracking-widest mb-4">Coming Soon</p>
-      <h1 class="font-display text-4xl text-brand-text mb-4">Services</h1>
-      <p class="text-brand-muted">This page is under construction.</p>
+
+  <!-- Page Header -->
+  <section class="pt-40 pb-16 px-5" aria-label="Services introduction">
+    <div class="max-w-6xl mx-auto">
+      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-5 reveal">
+        What We Do
+      </p>
+      <h1 class="font-display text-[clamp(2.4rem,5.5vw,4.5rem)] leading-[1.08] tracking-tight text-brand-text text-balance max-w-2xl mb-6 reveal reveal-d1">
+        Growth Systems, Not Just Websites.
+      </h1>
+      <p class="text-[clamp(1rem,1.8vw,1.15rem)] text-brand-muted leading-relaxed max-w-xl reveal reveal-d2">
+        Every service we offer is built around one question: how does this help your business grow? We don't sell deliverables. We build outcomes.
+      </p>
     </div>
   </section>
+
+  <!-- Divider -->
+  <div class="max-w-6xl mx-auto px-5">
+    <hr class="border-brand-border" />
+  </div>
+
+  <!-- Service Rows -->
+  <section class="py-4 px-5" aria-label="Services list">
+    <div class="max-w-6xl mx-auto">
+      {services.map((service, i) => (
+        <a
+          href={service.href}
+          class="group flex flex-col md:flex-row md:items-center gap-6 md:gap-12 py-14 border-b border-brand-border hover:border-brand-dim transition-colors reveal"
+          aria-label={`Learn more about ${service.name}`}
+        >
+          <!-- Number -->
+          <span class="font-display text-[clamp(2rem,3vw,2.8rem)] text-brand-border group-hover:text-brand-accent transition-colors leading-none shrink-0 w-16">
+            {service.number}
+          </span>
+
+          <!-- Content -->
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-2">
+              {service.accent}
+            </p>
+            <h2 class="font-display text-[clamp(1.5rem,2.8vw,2.2rem)] text-brand-text leading-tight mb-2 group-hover:text-white transition-colors">
+              {service.name}
+            </h2>
+            <p class="text-brand-accent font-medium text-[0.95rem] mb-3 italic">
+              {service.tagline}
+            </p>
+            <p class="text-brand-muted leading-relaxed text-[0.95rem] max-w-lg">
+              {service.summary}
+            </p>
+          </div>
+
+          <!-- Arrow -->
+          <span
+            class="text-brand-dim text-2xl shrink-0 group-hover:text-brand-accent group-hover:translate-x-1 transition-all"
+            aria-hidden="true"
+          >
+            →
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="py-24 text-center px-5" aria-label="Start a conversation">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="font-display text-[clamp(1.6rem,3vw,2.2rem)] text-brand-text leading-tight mb-4 reveal">
+        Not Sure Which Service You Need?
+      </h2>
+      <p class="text-brand-muted leading-relaxed mb-8 reveal reveal-d1">
+        Most of our best projects start with a conversation, not a spec sheet. Tell us what's not working and we'll figure out the right solution together.
+      </p>
+      <a
+        href="/contact"
+        class="inline-block px-8 py-4 bg-brand-accent hover:bg-brand-accent-light text-white font-semibold text-[0.95rem] rounded-xl transition-all hover:-translate-y-0.5 reveal reveal-d2"
+      >
+        Let's Talk
+      </a>
+    </div>
+  </section>
+
   <Footer slot="footer" />
 </Layout>
