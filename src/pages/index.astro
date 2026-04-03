@@ -1,20 +1,146 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/global/Header.astro';
-import Footer from '../../components/global/Footer.astro';
+// src/pages/index.astro
+// Homepage — Shoreline Web Solutions
+
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import Hero from '../components/home/Hero.astro';
+import ProblemStatement from '../components/home/ProblemStatement.astro';
+import ServiceRow from '../components/home/ServiceRow.astro';
+import Testimonial from '../components/home/Testimonial.astro';
+import AuditTeaser from '../components/home/AuditTeaser.astro';
+import SoftCTA from '../components/home/SoftCTA.astro';
+
+// ── Page-specific structured data ─────────────────────────
+const websiteSchema = {
+  "@type": "WebSite",
+  "name": "Shoreline Web Solutions",
+  "url": "https://shorelinewebsolutions.com",
+};
+
+// ── Service data for the four rows (aligned with /services hub) ──
+const services = [
+  {
+    number: "01",
+    headline: "Get Found.<br>Get Chosen.",
+    copy: "A hand-coded website engineered to rank on Google, load fast, and turn visitors into customers. No templates. No page builders. No shortcuts.",
+    linkText: "Web Development",
+    linkUrl: "/services/custom-web-development",
+  },
+  {
+    number: "02",
+    headline: "Software That Fits<br>the Way You Work.",
+    copy: "Purpose-built tools — client portals, internal dashboards, booking systems — designed around your workflow, not the other way around.",
+    linkText: "Custom Applications",
+    linkUrl: "/services/custom-application-development",
+  },
+  {
+    number: "03",
+    headline: "Do More.<br>Touch Less.",
+    copy: "Connect your tools, eliminate manual steps, and reclaim hours every week. We automate the repetitive so you can focus on the work that actually matters.",
+    linkText: "Automation",
+    linkUrl: "/services/automation-solutions",
+  },
+  {
+    number: "04",
+    headline: "Get Found. Get Chosen.<br>Get Ahead.",
+    copy: "Technical SEO, Core Web Vitals tuning, and content strategy that puts you on the first page — and keeps you there.",
+    linkText: "SEO & Performance",
+    linkUrl: "/services/seo-performance-optimization",
+  },
+];
+
+// ── Testimonial data ──────────────────────────────────────
+const testimonials = [
+  {
+    quote: "He really took the time to understand what I wanted and turned it into a clean, modern, and user-friendly website that exceeded my expectations.",
+    author: "Tayler Nadolny-Sipes",
+  },
+  {
+    quote: "We built our custom, not cookie-cutter, website with Randy, page by page. Now, we actually get compliments on our new, fresh and friendly site.",
+    author: "Shawn Pannone",
+  },
+  {
+    quote: "Randy was very professional and was able to not only address her needs but exceeded expectations and my client is very happy.",
+    author: "Tom Kelly",
+  },
+  {
+    quote: "He was persistent from start to finish with organization, where to put vital information and resources within the website. He had lots of great ideas.",
+    author: "Jeremy Martel",
+  },
+];
 ---
 
 <Layout
-  title="Services | Shoreline Web Solutions | Old Lyme, CT"
-  description="Custom web development, e-commerce, AI solutions, and application development for Connecticut small businesses."
+  title="Shoreline Web Solutions | Custom Websites & Growth Systems | Old Lyme, CT"
+  description="We build custom websites, applications, automation, and SEO systems that help Connecticut small businesses get found on Google, convert more visitors, and grow. Based in Old Lyme, CT."
+  ogImage="/images/og-homepage.jpg"
+  schema={websiteSchema}
 >
   <Header slot="header" />
-  <section class="min-h-screen flex items-center justify-center pt-24">
-    <div class="text-center px-5">
-      <p class="text-brand-accent text-sm font-semibold uppercase tracking-widest mb-4">Coming Soon</p>
-      <h1 class="font-display text-4xl text-brand-text mb-4">Services</h1>
-      <p class="text-brand-muted">This page is under construction.</p>
+
+  <!-- Section 1: Hero -->
+  <Hero />
+
+  <!-- Section 2: Problem Statement -->
+  <ProblemStatement />
+
+  <!-- Section 3: Services -->
+  <section class="py-20 md:py-24 border-t border-brand-border" aria-label="Our services">
+    <div class="max-w-6xl mx-auto px-5">
+      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-16 reveal">
+        What We Build
+      </p>
+
+      <!-- First row gets a top border -->
+      <div class="border-t border-brand-border">
+        {services.map((svc) => (
+          <ServiceRow
+            number={svc.number}
+            headline={svc.headline}
+            copy={svc.copy}
+            linkText={svc.linkText}
+            linkUrl={svc.linkUrl}
+          />
+        ))}
+      </div>
     </div>
   </section>
+
+  <!-- Section 4: Social Proof -->
+  <section class="py-24 md:py-28 bg-brand-surface overflow-hidden" aria-label="Client testimonials">
+    <div class="max-w-6xl mx-auto px-5">
+      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-brand-accent mb-14 reveal">
+        What Our Clients Say
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {testimonials.map((t, i) => (
+          <div class={`reveal reveal-d${i + 1} ${i === 1 ? 'md:mt-12' : ''} ${i === 2 ? 'md:-mt-4' : ''}`}>
+            <Testimonial quote={t.quote} author={t.author} rating={5} />
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 reveal">
+        <a
+          href="https://www.google.com/maps/place/Shoreline+Web+Solutions/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-brand-dim text-sm hover:text-brand-muted transition-colors"
+        >
+          Read all reviews on Google <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Audit Teaser -->
+  <AuditTeaser />
+
+  <!-- Section 6: Soft CTA -->
+  <SoftCTA />
+
   <Footer slot="footer" />
 </Layout>
