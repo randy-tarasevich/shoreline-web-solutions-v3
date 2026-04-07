@@ -65,6 +65,15 @@ const breadcrumbSchema = {
             <h2 class="font-display text-[clamp(1.5rem,2.8vw,2.2rem)] text-brand-text leading-tight mb-2 group-hover:text-white transition-colors">
               {project.data.title}
             </h2>
+            {(project.data.client || project.data.location) && (
+              <p class="text-sm text-brand-dim mb-3">
+                {project.data.client && <span>{project.data.client}</span>}
+                {project.data.client && project.data.location && (
+                  <span class="text-brand-border mx-1.5" aria-hidden="true">·</span>
+                )}
+                {project.data.location && <span>{project.data.location}</span>}
+              </p>
+            )}
             <p class="text-brand-muted leading-relaxed text-[0.95rem] max-w-lg mb-4">
               {project.data.description}
             </p>

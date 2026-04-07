@@ -56,9 +56,19 @@ const breadcrumbSchema = {
       <h1 class="font-display text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.08] tracking-tight text-brand-text text-balance mb-5 reveal reveal-d1">
         {project.data.title}
       </h1>
-      <p class="text-[clamp(1rem,1.8vw,1.15rem)] text-brand-muted leading-relaxed mb-8 reveal reveal-d2">
+      <p class="text-[clamp(1rem,1.8vw,1.15rem)] text-brand-muted leading-relaxed mb-6 reveal reveal-d2">
         {project.data.description}
       </p>
+
+      {(project.data.client || project.data.location) && (
+        <p class="text-sm text-brand-dim mb-8 reveal reveal-d2">
+          {project.data.client && <span>{project.data.client}</span>}
+          {project.data.client && project.data.location && (
+            <span class="text-brand-border mx-2" aria-hidden="true">·</span>
+          )}
+          {project.data.location && <span>{project.data.location}</span>}
+        </p>
+      )}
 
       <!-- Tech Stack -->
       <div class="flex flex-wrap gap-2 mb-8 reveal reveal-d2">
