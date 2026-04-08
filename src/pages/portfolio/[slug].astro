@@ -94,9 +94,14 @@ const breadcrumbSchema = {
 
     <hr class="border-brand-border mb-14" />
 
-    <!-- Case Study Content -->
-    <div class="prose-shoreline">
-      <Content />
+    <!-- Case Study Content (scroll wrapper: wide markdown tables + body overflow-x-hidden) -->
+    <div
+      class="-mx-5 overflow-x-auto overscroll-x-contain px-5 sm:mx-0 sm:px-0 [scrollbar-gutter:stable]"
+      style="-webkit-overflow-scrolling: touch;"
+    >
+      <div class="prose-shoreline min-w-0">
+        <Content />
+      </div>
     </div>
 
     <hr class="border-brand-border mt-16 mb-10" />
@@ -186,8 +191,10 @@ const breadcrumbSchema = {
   }
 
   /* ── Table styles ─────────────────────────────────────────── */
+  /* max-content + min-width 100%: narrow tables fill width; wide tables scroll instead of clipping */
   .prose-shoreline :global(table) {
-    width: 100%;
+    width: max-content;
+    min-width: 100%;
     border-collapse: collapse;
     margin: 2rem 0;
     font-size: 0.9rem;

@@ -1,7 +1,7 @@
 ---
 title: 'Know Better Do Better Dog Training'
 slug: 'kbdb-dog-training'
-description: 'A custom Astro.js website that took a certified dog trainer from invisible on Google to a 99/100 PageSpeed score, zero structured data to 8+ schema types, and a booking system that converts.'
+description: 'A custom Astro.js website that took a certified dog trainer from invisible on Google to a 99/100 PageSpeed score, zero structured data to 8+ schema types, and on-page PocketSuite booking so clients never leave her site to book.'
 technologies: ['Astro 5', 'Tailwind CSS v4', 'Cloudflare Pages', 'PocketSuite']
 url: 'https://kbdbdogtraining.com'
 client: 'Brittni Hyzer'
@@ -19,21 +19,21 @@ order: 1
 
 Brittni Hyzer is a Fear Free Certified Professional dog trainer serving Eastern Connecticut and Rhode Island. She had a growing business built on referrals, real expertise, and a brand name that said exactly what she stood for — _Know Better Do Better._
 
-But when a potential client Googled her, there was nothing to find that matched her credibility. Her existing site was built on Showit, a platform designed for photographers — not service businesses competing in local search. The result: a 73/100 PageSpeed score, a 5.3-second largest contentful paint, zero structured data, and no integrated booking system.
+But when a potential client Googled her, there was nothing to find that matched her credibility. Her existing site was built on Showit, a platform designed for photographers — not service businesses competing in local search. The result: a 73/100 PageSpeed score, a 5.3-second largest contentful paint, zero structured data, and a booking flow that sent people **off her site** to PocketSuite to complete consults and training sessions — even though she already had 24/7 booking through PocketSuite.
 
 She was invisible in the local search pack while competitors with less experience ranked above her — simply because their sites were technically faster and better structured for Google.
 
 **The baseline told the full story:**
 
-| Metric                   | Before (Showit) | Status                 |
-| ------------------------ | --------------- | ---------------------- |
-| Performance Score        | 73              | Needs Improvement      |
-| Largest Contentful Paint | 5.3s            | Poor — target is <2.5s |
-| First Contentful Paint   | 2.9s            | Needs Improvement      |
-| Total Blocking Time      | 130ms           | Moderate               |
-| Cumulative Layout Shift  | 0.05            | Acceptable             |
-| Structured Data Types    | 0               | Not detected           |
-| Online Booking           | None            | Manual / phone only    |
+| Metric                   | Before (Showit)     | Status                     |
+| ------------------------ | ------------------- | -------------------------- |
+| Performance Score        | 73                  | Needs Improvement          |
+| Largest Contentful Paint | 5.3s                | Poor — target is <2.5s     |
+| First Contentful Paint   | 2.9s                | Needs Improvement          |
+| Total Blocking Time      | 130ms               | Moderate                   |
+| Cumulative Layout Shift  | 0.05                | Acceptable                 |
+| Structured Data Types    | 0                   | Not detected               |
+| Online Booking           | PocketSuite (links) | Redirects off-site to book |
 
 ---
 
@@ -61,9 +61,9 @@ Rather than loading fonts from Google's CDN, all fonts were self-hosted in `/pub
 
 Eight JSON-LD schema types were implemented across the site: `LocalBusiness`, `Service` (per training type), `FAQPage`, `WebSite`, `BreadcrumbList`, `Review`, `ProfessionalService`, and `ItemList`. Google went from zero structured understanding of the business to a comprehensive knowledge graph entry — enabling Rich Results eligibility and AI-powered search summaries.
 
-### Booking integration — PocketSuite at the point of intent
+### Booking integration — PocketSuite on-page, not off in another tab
 
-PocketSuite lead capture and booking widgets were embedded directly on the Group Training, Private Training, and Contact pages — putting the conversion action at the moment of highest intent. Potential clients can request a booking without leaving the site or waiting for a callback. The result: a 24/7 booking system that works while Brittni is working with clients.
+Brittni was already using PocketSuite for 24/7 booking. On the old site, that meant **links out to PocketSuite’s domain**: visitors left her branded experience to book consults or training. We embedded PocketSuite **lead capture and booking widgets** directly on the Group Training, Private Training, and Contact pages. Same tool she relied on — but now the conversion happens **on her site**, at the moment of highest intent, without a jarring redirect. Clients can book consults and sessions while staying on kbdbdogtraining.com, including evenings and weekends while she’s with dogs.
 
 ### Deployment — Cloudflare Pages edge network
 
@@ -77,19 +77,19 @@ PageSpeed Insights is Google's own tool. These aren't estimates — they're the 
 
 ### Core Web Vitals — Before vs. After
 
-| Metric                   | Before | After Desktop   | After Mobile    | Change         |
-| ------------------------ | ------ | --------------- | --------------- | -------------- |
-| Performance Score        | 73     | **99**          | **87**          | +26 desktop    |
-| Largest Contentful Paint | 5.3s   | **1.0s**        | 4.0s†           | 81% faster     |
-| First Contentful Paint   | 2.9s   | **0.7s**        | **1.0s**        | 76% faster     |
-| Total Blocking Time      | 130ms  | **20ms**        | **30ms**        | 85% reduced    |
-| Cumulative Layout Shift  | 0.05   | **0**           | **0**           | Perfect        |
-| Best Practices           | —      | **100**         | **96**          | —              |
-| SEO Score                | —      | **92**          | **100**         | Perfect mobile |
-| Structured Data Types    | 0      | **8+**          | **8+**          | From zero      |
-| Booking System           | None   | **PocketSuite** | **PocketSuite** | 24/7           |
+| Metric                   | Before                 | After Desktop       | After Mobile        | Change              |
+| ------------------------ | ---------------------- | ------------------- | ------------------- | ------------------- |
+| Performance Score        | 73                     | **99**              | **87**              | +26 desktop         |
+| Largest Contentful Paint | 5.3s                   | **1.0s**            | 4.0s†               | 81% faster          |
+| First Contentful Paint   | 2.9s                   | **0.7s**            | **1.0s**            | 76% faster          |
+| Total Blocking Time      | 130ms                  | **20ms**            | **30ms**            | 85% reduced         |
+| Cumulative Layout Shift  | 0.05                   | **0**               | **0**               | Perfect             |
+| Best Practices           | —                      | **100**             | **96**              | —                   |
+| SEO Score                | —                      | **92**              | **100**             | Perfect mobile      |
+| Structured Data Types    | 0                      | **8+**              | **8+**              | From zero           |
+| Booking flow             | PocketSuite (off-site) | **Widgets on-page** | **Widgets on-page** | Stays on her domain |
 
-† Mobile LCP is affected by GA4 and PocketSuite third-party scripts which cannot be removed. The 4.0s figure reflects real-world constraints of running analytics and a booking system — both essential to the business. Desktop LCP reflects the experience of the majority of visitors.
+Mobile LCP is affected by GA4 and PocketSuite third-party scripts which cannot be removed. The 4.0s figure reflects real-world constraints of running analytics and a booking system — both essential to the business. Desktop LCP reflects the experience of the majority of visitors.
 
 ### What those numbers mean in practice
 
@@ -99,14 +99,14 @@ PageSpeed Insights is Google's own tool. These aren't estimates — they're the 
 
 **8+ Structured Data types** means Google can generate a rich, verified knowledge panel for Brittni's business and pull her services into AI-powered search summaries — exposure that competitors without schema markup simply cannot access.
 
-**PocketSuite on every conversion page** means potential clients don't have to call during business hours. They can request a booking at 10pm after watching training videos. That's a conversion opportunity that didn't exist before.
+**Embedded PocketSuite on every conversion page** keeps the booking flow where it belongs: on her site. She already had 24/7 online booking; what changed is that someone who’s ready at 10pm after a training video isn’t dumped onto a third-party URL to finish — they complete consults and session requests **without leaving** the page they trust.
 
 ### Business outcomes
 
 - **Professional anchor for every referral.** When someone recommends Brittni, there's now a real destination to send them — one that reinforces the recommendation rather than undermining it.
 - **Built to be found.** Semantic HTML, clean metadata, validated schema, and Cloudflare-edge performance give the site a strong technical foundation for local SEO.
 - **Owned, not rented.** The site runs on infrastructure Brittni controls — not a platform she's subject to for pricing changes, feature deprecations, or template limitations.
-- **24/7 booking capability.** Clients can book while Brittni is in sessions, on evenings and weekends, without her lifting a finger.
+- **On-brand booking, same 24/7 backend.** PocketSuite still handles scheduling around the clock; the difference is clients book consults and training **on her site** instead of being redirected away to complete the action.
 
 ### Pending — 30/60-Day GA4 Data
 
