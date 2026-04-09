@@ -32,23 +32,28 @@ export async function GET({ request }) {
       psiUrl.searchParams.set('key', import.meta.env.PAGESPEED_API_KEY)
     }
 
-    const [psiRes, htmlRes] = await Promise.allSettled([
-      fetch(psiUrl.toString(), {
-        signal: AbortSignal.timeout(25000),
-      }),
-      fetch(targetUrl, {
-        headers: { 'User-Agent': 'ShorelineAuditBot/1.0' },
-        redirect: 'follow',
-        signal: AbortSignal.timeout(10000),
-      }),
+    // ── Fire both fetches independently ────────────────────────
+    const psiPromise = fetch(psiUrl.toString(), {
+      signal: AbortSignal.timeout(25000),
+    }).catch(() => null)
+
+    const htmlPromise = fetch(targetUrl, {
+      headers: { 'User-Agent': 'ShorelineAuditBot/1.0' },
+      redirect: 'follow',
+      signal: AbortSignal.timeout(10000),
+    }).catch(() => null)
+
+    const [psiResponse, htmlResponse] = await Promise.all([
+      psiPromise,
+      htmlPromise,
     ])
 
-    // ── 3. Parse PageSpeed ──────────────────────────────────────
+    // ── Parse PageSpeed ─────────────────────────────────────────
     let pagespeed = null
 
-    if (psiRes.status === 'fulfilled' && psiRes.value.ok) {
+    if (psiResponse && psiResponse.ok) {
       try {
-        const psi = await psiRes.value.json()
+        const psi = await psiResponse.json()
         const lhr = psi.lighthouseResult || {}
         const cats = lhr.categories || {}
         const audits = lhr.audits || {}
@@ -110,20 +115,23 @@ export async function GET({ request }) {
           },
           https: safeBool('is-on-https'),
         }
+
+        console.log('PageSpeed OK — performance:', pagespeed.scores.performance)
       } catch (parseErr) {
         console.log('PageSpeed parse error:', parseErr.message)
       }
+    } else {
+      console.log('PageSpeed fetch failed or null')
     }
 
-    // ── 4. Parse HTML ───────────────────────────────────────────
+    // ── Parse HTML ──────────────────────────────────────────────
     let htmlAnalysis = null
 
-    if (htmlRes.status === 'fulfilled' && htmlRes.value.ok) {
+    if (htmlResponse && htmlResponse.ok) {
       try {
-        const html = await htmlRes.value.text()
-        const finalUrl = htmlRes.value.url
+        const html = await htmlResponse.text()
+        const finalUrl = htmlResponse.url
 
-        // ── Structured data analysis ──────────────────────────
         const richResultEligibility = {
           LocalBusiness: {
             label: 'Local Business',
@@ -217,12 +225,9 @@ export async function GET({ request }) {
         )
 
         const parsed = []
-        const rawBlocks = []
-
         for (const block of jsonLdBlocks) {
           try {
             const obj = JSON.parse(block)
-            rawBlocks.push(obj)
             if (obj['@graph']) {
               for (const item of obj['@graph']) {
                 const types = Array.isArray(item['@type'])
@@ -241,13 +246,10 @@ export async function GET({ request }) {
           }
         }
 
-        // Determine which rich result types are present
         const allTypes = new Set(parsed.flatMap((p) => p.type))
         const eligibleResults = Object.entries(richResultEligibility)
           .filter(([type]) => allTypes.has(type))
           .map(([type, info]) => ({ type, ...info }))
-
-        // Identify types found that aren't in our eligibility map (still report them)
         const unknownTypes = [...allTypes].filter(
           (t) => !richResultEligibility[t],
         )
@@ -306,9 +308,13 @@ export async function GET({ request }) {
             /<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["']/i,
           ),
         }
+
+        console.log('HTML parse OK')
       } catch (htmlErr) {
         console.log('HTML parse error:', htmlErr.message)
       }
+    } else {
+      console.log('HTML fetch failed or null')
     }
 
     const result = {
