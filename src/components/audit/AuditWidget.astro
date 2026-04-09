@@ -1,448 +1,92 @@
 ---
 // src/components/AuditWidget.astro
-// Drop this component into any page:  <AuditWidget />
-// Requires the API endpoint at src/pages/api/audit.js
 ---
 
 <section id="site-audit" class="relative overflow-hidden">
-
-  <!-- ── Background texture ────────────────────────────────── -->
   <div class="absolute inset-0 bg-[#0c1222]" aria-hidden="true">
-    <div class="absolute inset-0 opacity-[0.03]"
-      style="background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 1px); background-size: 32px 32px;">
-    </div>
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 1px); background-size: 32px 32px;"></div>
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-teal-500/5 blur-[120px]"></div>
   </div>
-
   <div class="relative max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-
-    <!-- ── Header ──────────────────────────────────────────── -->
     <div class="text-center mb-10">
-      <p class="text-teal-400 font-semibold text-sm tracking-widest uppercase mb-3">
-        Free Website Audit
-      </p>
-      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4 leading-tight">
-        How Does Your Website Stack Up?
-      </h2>
-      <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-        Enter your URL and get an instant performance report — the same data Google uses to rank your site.
-      </p>
+      <p class="text-teal-400 font-semibold text-sm tracking-widest uppercase mb-3">Free Website Audit</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4 leading-tight">How Does Your Website Stack Up?</h2>
+      <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">Enter your URL and get an instant performance report — the same data Google uses to rank your site.</p>
     </div>
-
-    <!-- ── Input Form ──────────────────────────────────────── -->
     <form id="audit-form" class="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto mb-6">
       <div class="relative flex-1">
         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="2" y1="12" x2="22" y2="12"></line>
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-          </svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
         </span>
-        <input
-          type="text"
-          id="audit-url"
-          placeholder="Enter your website URL"
-          required
-          class="w-full pl-12 pr-4 py-4 bg-[#131c31] border border-[#243049] rounded-xl text-white placeholder:text-slate-500 text-base focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-colors"
-        />
+        <input type="text" id="audit-url" placeholder="Enter your website URL" required class="w-full pl-12 pr-4 py-4 bg-[#131c31] border border-[#243049] rounded-xl text-white placeholder:text-slate-500 text-base focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-colors" />
       </div>
-      <button
-        type="submit"
-        id="audit-btn"
-        class="px-8 py-4 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-xl transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Run Audit
-      </button>
+      <button type="submit" id="audit-btn" class="px-8 py-4 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-xl transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">Run Audit</button>
     </form>
-
     <p id="audit-error" class="text-red-400 text-sm text-center mb-6 hidden"></p>
-
-    <!-- ── Loading State ───────────────────────────────────── -->
     <div id="audit-loading" class="hidden">
       <div class="max-w-2xl mx-auto">
         <div class="flex items-center justify-center gap-3 mb-6">
-          <svg class="animate-spin h-5 w-5 text-teal-400" viewBox="0 0 24 24" fill="none">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-          </svg>
+          <svg class="animate-spin h-5 w-5 text-teal-400" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
           <span class="text-slate-300 font-medium">Scanning your website…</span>
         </div>
         <div class="space-y-3">
-          <div id="step-pagespeed" class="flex items-center gap-3 text-sm text-slate-500">
-            <span class="w-5 h-5 rounded-full border border-slate-600 flex items-center justify-center text-xs">1</span>
-            Running PageSpeed Insights
-          </div>
-          <div id="step-seo" class="flex items-center gap-3 text-sm text-slate-500">
-            <span class="w-5 h-5 rounded-full border border-slate-600 flex items-center justify-center text-xs">2</span>
-            Analyzing SEO fundamentals
-          </div>
-          <div id="step-ssl" class="flex items-center gap-3 text-sm text-slate-500">
-            <span class="w-5 h-5 rounded-full border border-slate-600 flex items-center justify-center text-xs">3</span>
-            Checking SSL &amp; security
-          </div>
-          <div id="step-structured" class="flex items-center gap-3 text-sm text-slate-500">
-            <span class="w-5 h-5 rounded-full border border-slate-600 flex items-center justify-center text-xs">4</span>
-            Looking for structured data
-          </div>
+          <div id="step-pagespeed" class="flex items-center gap-3 text-sm text-slate-500"><span class="w-5 h-5 rounded-full border border-slate-600 flex items-center justify-center text-xs">1</span>Running PageSpeed Insights</div>
+          <div id="step-seo" class="flex items-center gap-3 text-sm text-slate-500"><span class="w-5 h-5 rounded-full border border-slate-600 flex items-center justify-center text-xs">2</span>Analyzing SEO fundamentals</div>
+          <div id="step-ssl" class="flex items-center gap-3 text-sm text-slate-500"><span class="w-5 h-5 rounded-full border border-slate-600 flex items-center justify-center text-xs">3</span>Checking SSL &amp; security</div>
+          <div id="step-structured" class="flex items-center gap-3 text-sm text-slate-500"><span class="w-5 h-5 rounded-full border border-slate-600 flex items-center justify-center text-xs">4</span>Checking rich results eligibility</div>
         </div>
       </div>
     </div>
-
-    <!-- ── Results Container ───────────────────────────────── -->
     <div id="audit-results" class="hidden"></div>
-
-    <!-- ── CTA (shown after results) ───────────────────────── -->
     <div id="audit-cta" class="hidden mt-12 text-center">
       <div class="bg-[#131c31] border border-[#243049] rounded-2xl p-8 max-w-2xl mx-auto">
         <h3 class="text-xl font-bold text-white mb-2">Want to fix these issues?</h3>
-        <p class="text-slate-400 mb-6 leading-relaxed">
-          We help Connecticut small businesses turn underperforming websites into growth engines. Let's talk about what these numbers mean for your business.
-        </p>
-        <a href="/contact" class="inline-block px-8 py-3 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-xl transition-colors">
-          Let's Talk
-        </a>
+        <p class="text-slate-400 mb-6 leading-relaxed">We help Connecticut small businesses turn underperforming websites into growth engines. Let's talk about what these numbers mean for your business.</p>
+        <a href="/contact" class="inline-block px-8 py-3 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-xl transition-colors">Let's Talk</a>
       </div>
     </div>
-
   </div>
 </section>
 
-
-<!-- ═══════════════════════════════════════════════════════════
-     CLIENT-SIDE ISLAND — Vanilla JS, no framework
-     ═══════════════════════════════════════════════════════════ -->
 <script>
-  const form      = document.getElementById("audit-form");
-  const urlInput  = document.getElementById("audit-url");
-  const btn       = document.getElementById("audit-btn");
-  const errorEl   = document.getElementById("audit-error");
-  const loading   = document.getElementById("audit-loading");
-  const results   = document.getElementById("audit-results");
-  const cta       = document.getElementById("audit-cta");
-
-  const steps = ["step-pagespeed", "step-seo", "step-ssl", "step-structured"];
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const url = urlInput.value.trim();
-    if (!url) return;
-
-    // Reset UI
-    errorEl.classList.add("hidden");
-    results.classList.add("hidden");
-    results.innerHTML = "";
-    cta.classList.add("hidden");
-    loading.classList.remove("hidden");
-    btn.disabled = true;
-    btn.textContent = "Scanning…";
-
-    // Animate loading steps
-    animateSteps();
-
-    try {
-      const res = await fetch(`/api/audit?url=${encodeURIComponent(url)}`);
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Audit failed");
-      }
-
-      const data = await res.json();
-      renderResults(data);
-
-    } catch (err) {
-      errorEl.textContent = err.message || "Something went wrong. Please check the URL and try again.";
-      errorEl.classList.remove("hidden");
-    } finally {
-      loading.classList.add("hidden");
-      btn.disabled = false;
-      btn.textContent = "Run Audit";
-      resetSteps();
-    }
-  });
-
-
-  /* ── Loading step animation ──────────────────────────────── */
-  let stepTimers = [];
-
-  function animateSteps() {
-    resetSteps();
-    steps.forEach((id, i) => {
-      const timer = setTimeout(() => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.classList.remove("text-slate-500");
-          el.classList.add("text-teal-400");
-          const circle = el.querySelector("span");
-          if (circle) {
-            circle.classList.remove("border-slate-600");
-            circle.classList.add("border-teal-400", "bg-teal-400/10");
-          }
-        }
-      }, i * 3000);
-      stepTimers.push(timer);
-    });
+  var form=document.getElementById("audit-form"),urlInput=document.getElementById("audit-url"),btn=document.getElementById("audit-btn"),errorEl=document.getElementById("audit-error"),loading=document.getElementById("audit-loading"),results=document.getElementById("audit-results"),cta=document.getElementById("audit-cta"),steps=["step-pagespeed","step-seo","step-ssl","step-structured"],stepTimers=[];
+  form.addEventListener("submit",async function(e){e.preventDefault();var url=urlInput.value.trim();if(!url)return;errorEl.classList.add("hidden");results.classList.add("hidden");results.innerHTML="";cta.classList.add("hidden");loading.classList.remove("hidden");btn.disabled=true;btn.textContent="Scanning…";animateSteps();try{var res=await fetch("/api/audit?url="+encodeURIComponent(url));if(!res.ok){var errData=await res.json().catch(function(){return{};});throw new Error(errData.error||"Audit failed");}var data=await res.json();renderResults(data);}catch(err){errorEl.textContent=err.message||"Something went wrong. Please check the URL and try again.";errorEl.classList.remove("hidden");}finally{loading.classList.add("hidden");btn.disabled=false;btn.textContent="Run Audit";resetSteps();}});
+  function animateSteps(){resetSteps();steps.forEach(function(id,i){var t=setTimeout(function(){var el=document.getElementById(id);if(el){el.classList.remove("text-slate-500");el.classList.add("text-teal-400");var c=el.querySelector("span");if(c){c.classList.remove("border-slate-600");c.classList.add("border-teal-400","bg-teal-400/10");}}},i*3000);stepTimers.push(t);});}
+  function resetSteps(){stepTimers.forEach(clearTimeout);stepTimers=[];steps.forEach(function(id){var el=document.getElementById(id);if(el){el.classList.add("text-slate-500");el.classList.remove("text-teal-400");var c=el.querySelector("span");if(c){c.classList.add("border-slate-600");c.classList.remove("border-teal-400","bg-teal-400/10");}}});}
+  function renderResults(data){
+    var ps=data.pagespeed,html=data.htmlAnalysis;
+    if(!ps&&!html){errorEl.textContent="Could not retrieve audit data for this URL.";errorEl.classList.remove("hidden");return;}
+    var out="";
+    if(ps&&ps.scores){out+='<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">'+scoreCard("Performance",ps.scores.performance)+scoreCard("SEO",ps.scores.seo)+scoreCard("Best Practices",ps.scores.bestPractices)+scoreCard("Accessibility",ps.scores.accessibility)+'</div>';}
+    if(ps&&ps.coreWebVitals){var cwv=ps.coreWebVitals;out+='<div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6"><h3 class="text-white font-bold text-lg mb-1">Core Web Vitals</h3><p class="text-slate-500 text-sm mb-5">The metrics Google uses to evaluate user experience.</p><div class="grid grid-cols-1 sm:grid-cols-3 gap-4">'+vitalCard("LCP","Largest Contentful Paint",cwv.lcp.value,cwv.lcp.score,"How fast the main content loads. Target: under 2.5s.")+vitalCard("CLS","Cumulative Layout Shift",cwv.cls.value,cwv.cls.score,"How much the layout shifts while loading. Target: under 0.1.")+vitalCard("TBT","Total Blocking Time",cwv.tbt.value,cwv.tbt.score,"How long the page is unresponsive. Target: under 200ms.")+'</div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">'+vitalCard("FCP","First Contentful Paint",cwv.fcp.value,cwv.fcp.score,"When the first content appears on screen.")+vitalCard("SI","Speed Index",cwv.si.value,cwv.si.score,"How quickly content is visually loaded.")+'</div></div>';}
+    out+='<div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6"><h3 class="text-white font-bold text-lg mb-1">SEO Fundamentals</h3><p class="text-slate-500 text-sm mb-5">How well your site communicates with search engines.</p><div class="space-y-3">';
+    var tv=html?html.title:null,ht=(ps&&ps.seoAudits)?ps.seoAudits.hasTitle:!!tv,td=tv?truncate(tv,60):(ht?"Found (rendered via JavaScript)":"Missing");
+    out+=checkRow(ht,"Title Tag",td,"The headline Google shows in search results.");
+    var mv=html?html.metaDescription:null,hm=(ps&&ps.seoAudits)?ps.seoAudits.hasMetaDescription:!!mv,md=mv?truncate(mv,120):(hm?"Found (rendered via JavaScript)":"Missing");
+    out+=checkRow(hm,"Meta Description",md,"The short summary that appears under your title in Google.");
+    var h1s=(html&&html.h1Tags)?html.h1Tags:[],h1d=h1s.length===0?"Missing":h1s.length===1?truncate(h1s[0],60):h1s.length+" found — should be 1";
+    out+=checkRow(h1s.length===1,"H1 Heading",h1d,"The main heading on your page. Every page should have exactly one.");
+    if(html&&html.images){var imgs=html.images,ao=imgs.withoutAlt===0&&imgs.total>0,ad=imgs.total===0?"No images found":imgs.withAlt+"/"+imgs.total+" images have alt text";out+=checkRow(ao,"Image Alt Text",ad,"Descriptive labels on your images that help Google understand them.");}
+    if(html&&html.canonical){out+=checkRow(true,"Canonical URL",truncate(html.canonical,60),"Tells Google which version of this page is the official one.");}else if(ps&&ps.seoAudits&&ps.seoAudits.hasCanonical===false){out+=checkRow(false,"Canonical URL","Missing","Tells Google which version of this page is the official one.");}
+    if(ps&&ps.seoAudits&&ps.seoAudits.isCrawlable!==undefined){out+=checkRow(ps.seoAudits.isCrawlable,"Crawlable",ps.seoAudits.isCrawlable?"Yes":"Blocked by robots.txt","Whether Google is allowed to read and index your site.");}
+    out+='</div></div>';
+    var sslOk=ps?ps.https:(html?html.ssl:false);
+    out+='<div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6"><h3 class="text-white font-bold text-lg mb-1">SSL &amp; Security</h3><p class="text-slate-500 text-sm mb-5">HTTPS protects your visitors and is a Google ranking signal.</p><div class="space-y-3">'+checkRow(sslOk,"HTTPS",sslOk?"Site loads over a secure connection":"Not using HTTPS — visitors see a security warning","The padlock icon in the browser bar. Without it, Google ranks you lower.")+'</div></div>';
+    if(ps&&ps.mobile){var m=ps.mobile,hv=m.viewport||(html?html.hasViewport:false);out+='<div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6"><h3 class="text-white font-bold text-lg mb-1">Mobile Friendliness</h3><p class="text-slate-500 text-sm mb-5">Over 60% of local searches happen on phones.</p><div class="space-y-3">'+checkRow(hv,"Viewport Meta Tag",hv?"Configured for mobile":"Missing — page won't scale on mobile","Tells phones how to display your site.")+checkRow(m.fontSize,"Readable Font Sizes",m.fontSize?"Text is legible on mobile":"Some text may be too small on phones","Whether your text is large enough to read without zooming.")+checkRow(m.tapTargets,"Tap Target Sizing",m.tapTargets?"Buttons and links are properly sized":"Some buttons may be too small or too close together","Whether buttons are big enough to tap with a finger.")+'</div></div>';}
+    if(html){out+='<div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6"><h3 class="text-white font-bold text-lg mb-1">Social Sharing (Open Graph)</h3><p class="text-slate-500 text-sm mb-5">Controls how your site appears when shared on Facebook, LinkedIn, etc.</p><div class="space-y-3">'+checkRow(!!html.ogTitle,"OG Title",html.ogTitle?truncate(html.ogTitle,60):"Missing","The headline that appears when someone shares your link.")+checkRow(!!html.ogDescription,"OG Description",html.ogDescription?truncate(html.ogDescription,80):"Missing","The summary text shown below the title when your link is shared.")+checkRow(!!html.ogImage,"OG Image",html.ogImage?"Set":"Missing — links will show without a preview","The image that appears when your link is shared.")+'</div></div>';}
+    var sd=html?html.structuredData:null,hasSD=sd&&sd.count>0,eligible=(sd&&sd.eligibleRichResults)?sd.eligibleRichResults:[],unknownTypes=(sd&&sd.unknownTypes)?sd.unknownTypes:[],gUrl="https://search.google.com/test/rich-results?url="+encodeURIComponent(data.url);
+    out+='<div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6"><div class="flex items-start justify-between gap-4 mb-1"><h3 class="text-white font-bold text-lg">Rich Results Eligibility</h3><a href="'+gUrl+'" target="_blank" rel="noopener noreferrer" class="shrink-0 text-xs font-semibold text-teal-400 hover:text-teal-300 border border-teal-400/30 hover:border-teal-400/60 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap">Test in Google ↗</a></div><p class="text-slate-500 text-sm mb-5">Rich results are enhanced Google listings — star ratings, FAQs, breadcrumbs — that make your site stand out in search. They require structured data (JSON-LD) to be present and correctly formatted.</p>';
+    if(!sd){out+='<div class="flex items-start gap-3 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20"><svg style="color:#f59e0b" class="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div><p class="text-white text-sm font-medium">Could not fetch page directly</p><p class="text-slate-500 text-xs mt-1 leading-relaxed">This site blocked our scanner. Use Google\'s Rich Results Test below to check structured data directly.</p></div></div>';}
+    else if(!hasSD){out+='<div class="flex items-start gap-3 p-4 rounded-xl bg-red-500/5 border border-red-500/20"><svg style="color:#ef4444" class="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg><div><p class="text-white text-sm font-medium">No structured data detected</p><p class="text-slate-500 text-xs mt-1 leading-relaxed">This site has zero JSON-LD blocks. Google cannot generate rich results for any page. Adding a LocalBusiness schema alone would make your business eligible for knowledge panel features.</p></div></div>';}
+    else{out+='<div class="mb-5">'+checkRow(true,sd.count+" JSON-LD block"+(sd.count>1?"s":"")+" detected",eligible.length>0?"Eligible for "+eligible.length+" rich result type"+(eligible.length>1?"s":""):"Structured data present but no standard rich result types detected","Google can read your structured data. Rich results depend on schema types and completeness.")+"</div>";
+    if(eligible.length>0){out+='<p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">Rich result types found</p><div class="space-y-3 mb-5">';for(var i=0;i<eligible.length;i++){var r=eligible[i];out+='<div class="flex items-start gap-3 p-3 rounded-xl bg-teal-500/5 border border-teal-500/15"><svg style="color:#0d9488" class="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><div><p class="text-white text-sm font-medium">'+escapeHtml(r.label)+'</p><p class="text-slate-500 text-xs mt-0.5 leading-relaxed">'+escapeHtml(r.description)+'</p></div></div>';}out+='</div>';}
+    if(unknownTypes.length>0){out+='<p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">Additional schema types</p><div class="flex flex-wrap gap-2 mb-5">';for(var j=0;j<unknownTypes.length;j++){out+='<span class="text-xs text-slate-400 bg-[#0c1222] border border-[#243049] px-3 py-1 rounded-full">'+escapeHtml(unknownTypes[j])+'</span>';}out+='</div>';}}
+    out+='<div class="mt-5 pt-5 border-t border-[#243049] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><p class="text-slate-500 text-xs leading-relaxed max-w-sm">Google\'s Rich Results Test runs live validation and shows exactly which features your structured data qualifies for.</p><a href="'+gUrl+'" target="_blank" rel="noopener noreferrer" class="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold rounded-lg transition-colors"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>Run Google\'s Rich Results Test</a></div></div>';
+    results.innerHTML=out;results.classList.remove("hidden");cta.classList.remove("hidden");results.scrollIntoView({behavior:"smooth",block:"start"});
   }
-
-  function resetSteps() {
-    stepTimers.forEach(clearTimeout);
-    stepTimers = [];
-    steps.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.classList.add("text-slate-500");
-        el.classList.remove("text-teal-400");
-        const circle = el.querySelector("span");
-        if (circle) {
-          circle.classList.add("border-slate-600");
-          circle.classList.remove("border-teal-400", "bg-teal-400/10");
-        }
-      }
-    });
-  }
-
-
-  /* ── Render results ──────────────────────────────────────── */
-  function renderResults(data) {
-    const ps = data.pagespeed;
-    const html = data.htmlAnalysis;
-
-    if (!ps && !html) {
-      errorEl.textContent = "Could not retrieve audit data for this URL.";
-      errorEl.classList.remove("hidden");
-      return;
-    }
-
-    let out = "";
-
-    // ── Score overview ────────────────────────────────────────
-    if (ps?.scores) {
-      out += `
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          ${scoreCard("Performance", ps.scores.performance)}
-          ${scoreCard("SEO", ps.scores.seo)}
-          ${scoreCard("Best Practices", ps.scores.bestPractices)}
-          ${scoreCard("Accessibility", ps.scores.accessibility)}
-        </div>
-      `;
-    }
-
-    // ── Core Web Vitals ───────────────────────────────────────
-    if (ps?.coreWebVitals) {
-      const cwv = ps.coreWebVitals;
-      out += `
-        <div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6">
-          <h3 class="text-white font-bold text-lg mb-1">Core Web Vitals</h3>
-          <p class="text-slate-500 text-sm mb-5">The metrics Google uses to evaluate user experience.</p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            ${vitalCard("LCP", "Largest Contentful Paint", cwv.lcp.value, cwv.lcp.score, "How fast the main content loads. Target: under 2.5s.")}
-            ${vitalCard("CLS", "Cumulative Layout Shift", cwv.cls.value, cwv.cls.score, "How much the layout shifts while loading. Target: under 0.1.")}
-            ${vitalCard("TBT", "Total Blocking Time", cwv.tbt.value, cwv.tbt.score, "How long the page is unresponsive. Target: under 200ms.")}
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-            ${vitalCard("FCP", "First Contentful Paint", cwv.fcp.value, cwv.fcp.score, "When the first content appears on screen.")}
-            ${vitalCard("SI", "Speed Index", cwv.si.value, cwv.si.score, "How quickly content is visually loaded.")}
-          </div>
-        </div>
-      `;
-    }
-
-    // ── SEO Fundamentals ──────────────────────────────────────
-    out += `<div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6">`;
-    out += `<h3 class="text-white font-bold text-lg mb-1">SEO Fundamentals</h3>`;
-    out += `<p class="text-slate-500 text-sm mb-5">How well your site communicates with search engines.</p>`;
-    out += `<div class="space-y-3">`;
-
-    // Title
-    const title = html?.title;
-    const hasTitle = ps?.seoAudits?.hasTitle ?? !!title;
-    const titleDetail = title ? truncate(title, 60) : (hasTitle ? "Found (rendered via JavaScript)" : "Missing");
-    out += checkRow(hasTitle, "Title Tag", titleDetail,
-      "The headline Google shows in search results. It's the first thing people see when they find you.");
-
-    // Meta description
-    const metaDesc = html?.metaDescription;
-    const hasMeta = ps?.seoAudits?.hasMetaDescription ?? !!metaDesc;
-    const metaDetail = metaDesc ? truncate(metaDesc, 120) : (hasMeta ? "Found (rendered via JavaScript)" : "Missing");
-    out += checkRow(hasMeta, "Meta Description", metaDetail,
-      "The short summary that appears under your title in Google. A good one convinces people to click.");
-
-    // H1 tags
-    const h1s = html?.h1Tags || [];
-    out += checkRow(
-      h1s.length === 1,
-      "H1 Heading",
-      h1s.length === 0 ? "Missing" : h1s.length === 1 ? truncate(h1s[0], 60) : `${h1s.length} found — should be 1`,
-      "The main heading on your page. Google uses it to understand what the page is about. Every page should have exactly one."
-    );
-
-    // Image alt text
-    if (html?.images) {
-      const imgs = html.images;
-      const altOk = imgs.withoutAlt === 0 && imgs.total > 0;
-      out += checkRow(
-        altOk,
-        "Image Alt Text",
-        imgs.total === 0 ? "No images found" : `${imgs.withAlt}/${imgs.total} images have alt text`,
-        "Descriptive labels on your images that help Google understand them and make your site accessible to people using screen readers."
-      );
-    }
-
-    // Canonical
-    if (html?.canonical) {
-      out += checkRow(true, "Canonical URL", truncate(html.canonical, 60),
-        "Tells Google which version of this page is the 'official' one, preventing duplicate content issues.");
-    } else if (ps?.seoAudits?.hasCanonical === false) {
-      out += checkRow(false, "Canonical URL", "Missing",
-        "Tells Google which version of this page is the 'official' one, preventing duplicate content issues.");
-    }
-
-    // Crawlable
-    if (ps?.seoAudits?.isCrawlable !== undefined) {
-      out += checkRow(ps.seoAudits.isCrawlable,
-        "Crawlable",
-        ps.seoAudits.isCrawlable ? "Yes" : "Blocked by robots.txt",
-        "Whether Google is allowed to read and index your site. If this fails, your site won't appear in search results at all."
-      );
-    }
-
-    out += `</div></div>`;
-
-    // ── SSL / HTTPS ───────────────────────────────────────────
-    const sslOk = ps?.https ?? html?.ssl;
-    out += `
-      <div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6">
-        <h3 class="text-white font-bold text-lg mb-1">SSL &amp; Security</h3>
-        <p class="text-slate-500 text-sm mb-5">HTTPS protects your visitors and is a Google ranking signal.</p>
-        <div class="space-y-3">
-          ${checkRow(sslOk, "HTTPS", sslOk ? "Site loads over a secure connection" : "Not using HTTPS — visitors see a security warning",
-            "The padlock icon in the browser bar. Without it, browsers warn visitors your site is 'not secure' — and Google ranks you lower.")}
-        </div>
-      </div>
-    `;
-
-    // ── Mobile Friendliness ───────────────────────────────────
-    if (ps?.mobile) {
-      const m = ps.mobile;
-      out += `
-        <div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6">
-          <h3 class="text-white font-bold text-lg mb-1">Mobile Friendliness</h3>
-          <p class="text-slate-500 text-sm mb-5">Over 60% of local searches happen on phones.</p>
-          <div class="space-y-3">
-            ${checkRow(m.viewport || html?.hasViewport, "Viewport Meta Tag", (m.viewport || html?.hasViewport) ? "Configured for mobile" : "Missing — page won't scale on mobile",
-              "Tells phones how to display your site. Without it, your page looks like a tiny desktop site that visitors have to pinch and zoom.")}
-            ${checkRow(m.fontSize, "Readable Font Sizes", m.fontSize ? "Text is legible on mobile" : "Some text may be too small on phones",
-              "Whether your text is large enough to read on a phone without zooming in.")}
-            ${checkRow(m.tapTargets, "Tap Target Sizing", m.tapTargets ? "Buttons and links are properly sized" : "Some buttons may be too small or too close together",
-              "Whether buttons and links are big enough to tap with a finger. Small or crowded targets frustrate visitors and increase bounce rates.")}
-          </div>
-        </div>
-      `;
-    }
-
-    // ── Open Graph ────────────────────────────────────────────
-    if (html) {
-      const hasOG = !!(html.ogTitle || html.ogDescription || html.ogImage);
-      out += `
-        <div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6">
-          <h3 class="text-white font-bold text-lg mb-1">Social Sharing (Open Graph)</h3>
-          <p class="text-slate-500 text-sm mb-5">Controls how your site appears when shared on Facebook, LinkedIn, etc.</p>
-          <div class="space-y-3">
-            ${checkRow(!!html.ogTitle, "OG Title", html.ogTitle ? truncate(html.ogTitle, 60) : "Missing",
-              "The headline that appears when someone shares your link on social media. Without it, platforms guess — and usually guess wrong.")}
-            ${checkRow(!!html.ogDescription, "OG Description", html.ogDescription ? truncate(html.ogDescription, 80) : "Missing",
-              "The summary text shown below the title when your link is shared. A good one drives clicks from social media.")}
-            ${checkRow(!!html.ogImage, "OG Image", html.ogImage ? "Set" : "Missing — links will show without a preview image",
-              "The image that appears when your link is shared. Posts with images get significantly more engagement than text-only shares.")}
-          </div>
-        </div>
-      `;
-    }
-
-    // ── Structured Data / Rich Results ────────────────────────
-    if (html?.structuredData) {
-      const sd = html.structuredData;
-      const hasSD = sd.count > 0;
-      out += `
-        <div class="bg-[#131c31] border border-[#243049] rounded-2xl p-6 mb-6">
-          <h3 class="text-white font-bold text-lg mb-1">Structured Data (Rich Results)</h3>
-          <p class="text-slate-500 text-sm mb-5">Structured data helps Google understand your business and display rich results in search.</p>
-          <div class="space-y-3">
-            ${checkRow(hasSD, "JSON-LD Structured Data", hasSD ? `${sd.count} block${sd.count > 1 ? "s" : ""} detected` : "None found — Google can't read your business info in a structured way",
-              "Code that tells Google your business name, address, services, and reviews in a language it understands. Without it, Google has to guess — and competitors with it get richer, more visible search listings.")}
-            ${hasSD ? sd.types.map(t =>
-              `<div class="flex items-center gap-2 pl-8 text-sm">
-                <span style="color:#0d9488">↳</span>
-                <span class="text-slate-300">${escapeHtml(Array.isArray(t.type) ? t.type.join(", ") : t.type || "Unknown")}${t.name ? ` — ${escapeHtml(truncate(t.name, 40))}` : ""}</span>
-              </div>`
-            ).join("") : ""}
-          </div>
-        </div>
-      `;
-    }
-
-    results.innerHTML = out;
-    results.classList.remove("hidden");
-    cta.classList.remove("hidden");
-
-    // Scroll to results
-    results.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-
-  /* ── Component helpers ───────────────────────────────────── */
-
-  function scoreCard(label, score) {
-    const color = score >= 90 ? "#10b981" : score >= 50 ? "#f59e0b" : "#ef4444";
-    const bgColor = score >= 90 ? "rgba(16,185,129,0.1)" : score >= 50 ? "rgba(245,158,11,0.1)" : "rgba(239,68,68,0.1)";
-    const tag = score >= 90 ? "Good" : score >= 50 ? "Needs Work" : "Poor";
-    return `
-      <div class="bg-[#131c31] border border-[#243049] rounded-2xl p-5 text-center">
-        <div style="color:${color}" class="text-4xl font-bold mb-1">${score}</div>
-        <div class="text-slate-400 text-sm font-medium mb-2">${label}</div>
-        <span style="background:${bgColor};color:${color};border:1px solid ${color}33" class="text-xs font-semibold px-2.5 py-0.5 rounded-full">${tag}</span>
-      </div>
-    `;
-  }
-
-  function vitalCard(abbr, fullName, value, score, description) {
-    const color = score >= 90 ? "#10b981" : score >= 50 ? "#f59e0b" : "#ef4444";
-    const borderColor = score >= 90 ? "rgba(16,185,129,0.2)" : score >= 50 ? "rgba(245,158,11,0.2)" : "rgba(239,68,68,0.2)";
-    return `
-      <div class="bg-[#0c1222] rounded-xl p-4" style="border:1px solid ${borderColor}">
-        <div class="flex items-baseline justify-between mb-1">
-          <span class="text-slate-400 text-xs font-semibold tracking-wider uppercase">${abbr}</span>
-          <span style="color:${color}" class="text-lg font-bold">${escapeHtml(value)}</span>
-        </div>
-        <p class="text-slate-500 text-xs leading-relaxed">${description}</p>
-      </div>
-    `;
-  }
-
-  function checkRow(pass, label, detail, description) {
-    const icon = pass
-      ? `<svg style="color:#10b981" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`
-      : `<svg style="color:#ef4444" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`;
-    const descHtml = description ? `<p class="text-slate-600 text-xs mt-1 leading-relaxed">${description}</p>` : "";
-    return `
-      <div class="flex items-start gap-3">
-        ${icon}
-        <div class="min-w-0">
-          <span class="text-white text-sm font-medium">${label}</span>
-          <p class="text-slate-500 text-xs mt-0.5 break-words">${escapeHtml(detail)}</p>
-          ${descHtml}
-        </div>
-      </div>
-    `;
-  }
-
-  function truncate(str, len) {
-    if (!str) return "";
-    return str.length > len ? str.slice(0, len) + "…" : str;
-  }
-
-  function escapeHtml(str) {
-    if (!str) return "";
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
+  function scoreCard(label,score){var c=score>=90?"#10b981":score>=50?"#f59e0b":"#ef4444",bg=score>=90?"rgba(16,185,129,0.1)":score>=50?"rgba(245,158,11,0.1)":"rgba(239,68,68,0.1)",tag=score>=90?"Good":score>=50?"Needs Work":"Poor";return'<div class="bg-[#131c31] border border-[#243049] rounded-2xl p-5 text-center"><div style="color:'+c+'" class="text-4xl font-bold mb-1">'+score+'</div><div class="text-slate-400 text-sm font-medium mb-2">'+label+'</div><span style="background:'+bg+';color:'+c+';border:1px solid '+c+'33" class="text-xs font-semibold px-2.5 py-0.5 rounded-full">'+tag+'</span></div>';}
+  function vitalCard(abbr,fullName,value,score,description){var c=score>=90?"#10b981":score>=50?"#f59e0b":"#ef4444",bc=score>=90?"rgba(16,185,129,0.2)":score>=50?"rgba(245,158,11,0.2)":"rgba(239,68,68,0.2)";return'<div class="bg-[#0c1222] rounded-xl p-4" style="border:1px solid '+bc+'"><div class="flex items-baseline justify-between mb-1"><span class="text-slate-400 text-xs font-semibold tracking-wider uppercase">'+abbr+'</span><span style="color:'+c+'" class="text-lg font-bold">'+escapeHtml(value)+'</span></div><p class="text-slate-500 text-xs leading-relaxed">'+description+'</p></div>';}
+  function checkRow(pass,label,detail,description){var icon=pass?'<svg style="color:#10b981" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>':'<svg style="color:#ef4444" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>',desc=description?'<p class="text-slate-600 text-xs mt-1 leading-relaxed">'+description+'</p>':"";return'<div class="flex items-start gap-3">'+icon+'<div class="min-w-0"><span class="text-white text-sm font-medium">'+label+'</span><p class="text-slate-500 text-xs mt-0.5 break-words">'+escapeHtml(detail)+'</p>'+desc+'</div></div>';}
+  function truncate(str,len){if(!str)return"";return str.length>len?str.slice(0,len)+"…":str;}
+  function escapeHtml(str){if(!str)return"";return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 </script>

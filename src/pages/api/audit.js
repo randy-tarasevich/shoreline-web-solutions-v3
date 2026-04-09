@@ -18,7 +18,6 @@ export async function GET({ request }) {
   }
 
   try {
-    // ── 1. Build PageSpeed URL ──────────────────────────────────
     const psiUrl = new URL(
       'https://www.googleapis.com/pagespeedonline/v5/runPagespeed',
     )
@@ -34,7 +33,9 @@ export async function GET({ request }) {
     }
 
     const [psiRes, htmlRes] = await Promise.allSettled([
-      fetch(psiUrl.toString()),
+      fetch(psiUrl.toString(), {
+        signal: AbortSignal.timeout(25000),
+      }),
       fetch(targetUrl, {
         headers: { 'User-Agent': 'ShorelineAuditBot/1.0' },
         redirect: 'follow',
@@ -109,19 +110,9 @@ export async function GET({ request }) {
           },
           https: safeBool('is-on-https'),
         }
-
-        console.log(
-          'PageSpeed parsed OK — performance:',
-          pagespeed.scores.performance,
-        )
       } catch (parseErr) {
         console.log('PageSpeed parse error:', parseErr.message)
       }
-    } else {
-      const status =
-        psiRes.status === 'fulfilled' ? psiRes.value.status : 'rejected'
-      const reason = psiRes.status === 'rejected' ? psiRes.reason?.message : ''
-      console.log('PageSpeed fetch failed:', status, reason)
     }
 
     // ── 4. Parse HTML ───────────────────────────────────────────
@@ -132,9 +123,138 @@ export async function GET({ request }) {
         const html = await htmlRes.value.text()
         const finalUrl = htmlRes.value.url
 
+        // ── Structured data analysis ──────────────────────────
+        const richResultEligibility = {
+          LocalBusiness: {
+            label: 'Local Business',
+            description:
+              'Enables your business to appear in local knowledge panels and map results.',
+          },
+          Organization: {
+            label: 'Organization',
+            description: 'Displays your brand info and logo in Google search.',
+          },
+          WebSite: {
+            label: 'Sitelinks Searchbox',
+            description:
+              'Can add a search box directly in your Google listing.',
+          },
+          Product: {
+            label: 'Product',
+            description:
+              'Shows price, availability, and reviews directly in search results.',
+          },
+          FAQPage: {
+            label: 'FAQ',
+            description:
+              'Expands your search listing with collapsible Q&A directly on the results page.',
+          },
+          HowTo: {
+            label: 'How-To',
+            description:
+              'Displays step-by-step instructions with images in search results.',
+          },
+          Article: {
+            label: 'Article',
+            description:
+              'Eligible for Top Stories carousel and enhanced article display.',
+          },
+          BlogPosting: {
+            label: 'Blog Post',
+            description:
+              'Eligible for Top Stories carousel and enhanced article display.',
+          },
+          Event: {
+            label: 'Event',
+            description:
+              'Shows event dates, locations, and ticket info in search results.',
+          },
+          Review: {
+            label: 'Review',
+            description: 'Displays star ratings in search results.',
+          },
+          AggregateRating: {
+            label: 'Star Ratings',
+            description:
+              'Shows aggregate star ratings directly in your search listing.',
+          },
+          BreadcrumbList: {
+            label: 'Breadcrumbs',
+            description:
+              "Shows your site's navigation path in search results instead of just the URL.",
+          },
+          Service: {
+            label: 'Service',
+            description: 'Helps Google understand your specific services.',
+          },
+          Person: {
+            label: 'Person',
+            description: 'Displays personal information in knowledge panels.',
+          },
+          Recipe: {
+            label: 'Recipe',
+            description:
+              'Shows cook time, ratings, and calories in search results.',
+          },
+          JobPosting: {
+            label: 'Job Posting',
+            description: 'Surfaces job listings directly in Google Jobs.',
+          },
+          Course: {
+            label: 'Course',
+            description: 'Displays course information in Google search.',
+          },
+          VideoObject: {
+            label: 'Video',
+            description:
+              'Enables video thumbnails and timestamps in search results.',
+          },
+        }
+
+        const jsonLdBlocks = extractAll(
+          html,
+          /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi,
+        )
+
+        const parsed = []
+        const rawBlocks = []
+
+        for (const block of jsonLdBlocks) {
+          try {
+            const obj = JSON.parse(block)
+            rawBlocks.push(obj)
+            if (obj['@graph']) {
+              for (const item of obj['@graph']) {
+                const types = Array.isArray(item['@type'])
+                  ? item['@type']
+                  : [item['@type']].filter(Boolean)
+                parsed.push({ type: types, name: item.name || null })
+              }
+            } else {
+              const types = Array.isArray(obj['@type'])
+                ? obj['@type']
+                : [obj['@type']].filter(Boolean)
+              parsed.push({ type: types, name: obj.name || null })
+            }
+          } catch (e) {
+            // malformed JSON-LD, skip
+          }
+        }
+
+        // Determine which rich result types are present
+        const allTypes = new Set(parsed.flatMap((p) => p.type))
+        const eligibleResults = Object.entries(richResultEligibility)
+          .filter(([type]) => allTypes.has(type))
+          .map(([type, info]) => ({ type, ...info }))
+
+        // Identify types found that aren't in our eligibility map (still report them)
+        const unknownTypes = [...allTypes].filter(
+          (t) => !richResultEligibility[t],
+        )
+
         htmlAnalysis = {
           ssl: finalUrl.startsWith('https://'),
-          finalUrl: finalUrl,
+          finalUrl,
           title: extractTag(html, /<title[^>]*>([\s\S]*?)<\/title>/i),
           metaDescription:
             extractAttr(
@@ -157,11 +277,7 @@ export async function GET({ request }) {
             const withAlt = imgTags.filter((t) =>
               /alt=["'][^"']+["']/i.test(t),
             ).length
-            return {
-              total: total,
-              withAlt: withAlt,
-              withoutAlt: total - withAlt,
-            }
+            return { total, withAlt, withoutAlt: total - withAlt }
           })(),
           hasViewport: /<meta[^>]*name=["']viewport["']/i.test(html),
           ogTitle: extractAttr(
@@ -176,49 +292,30 @@ export async function GET({ request }) {
             html,
             /<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']*)["']/i,
           ),
-          structuredData: (() => {
-            const jsonLdBlocks = extractAll(
-              html,
-              /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi,
-            )
-            const parsed = []
-            for (const block of jsonLdBlocks) {
-              try {
-                const obj = JSON.parse(block)
-                if (obj['@graph']) {
-                  for (const item of obj['@graph']) {
-                    parsed.push({
-                      type: item['@type'],
-                      name: item.name || null,
-                    })
-                  }
-                } else {
-                  parsed.push({ type: obj['@type'], name: obj.name || null })
-                }
-              } catch (e) {
-                // malformed JSON-LD, skip
-              }
-            }
-            return { count: parsed.length, types: parsed }
-          })(),
+          structuredData: {
+            count: parsed.length,
+            types: parsed,
+            eligibleRichResults: eligibleResults,
+            unknownTypes,
+            hasLocalBusiness: allTypes.has('LocalBusiness'),
+            hasFAQ: allTypes.has('FAQPage'),
+            hasBreadcrumbs: allTypes.has('BreadcrumbList'),
+          },
           canonical: extractAttr(
             html,
             /<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["']/i,
           ),
         }
-
-        console.log('HTML parsed OK')
       } catch (htmlErr) {
         console.log('HTML parse error:', htmlErr.message)
       }
     }
 
-    // ── 5. Respond ──────────────────────────────────────────────
     const result = {
       url: targetUrl,
       timestamp: new Date().toISOString(),
-      pagespeed: pagespeed,
-      htmlAnalysis: htmlAnalysis,
+      pagespeed,
+      htmlAnalysis,
     }
 
     return new Response(JSON.stringify(result), {
