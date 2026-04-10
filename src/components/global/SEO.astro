@@ -55,3 +55,12 @@ const resolvedOgImage = ogImage.startsWith("http") ? ogImage : new URL(ogImage, 
 <!-- Geo -->
 <meta name="geo.region" content="US-CT" />
 <meta name="geo.placename" content="Old Lyme" />
+
+<!-- Google Analytics 4 -->
+<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-HE2YCPXDWK"></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-HE2YCPXDWK");
+</script>
